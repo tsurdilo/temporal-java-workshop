@@ -17,8 +17,15 @@ contains the full code that you can just look at and run.
 
 ### 1. [Getting Started](src/main/java/io/workshop/c1/README.md)
 * Getting started chapter:
-    * learn what prerequisites you need to run your first Temporal workflow. Learn how to install and run the Temporal server, CLI.
+    * Learn what prerequisites you need to run your first Temporal workflow. Learn how to install and run the Temporal server, CLI.
     * Learn how to create your first Maven-based Temporal Java application.
     * Learn some core Temporal concepts 
-    
-### 2. 
+      * Workflows
+      * Invoking Workflows
+      * Workers
+      * Workflow exeptions
+      * Activities
+      * Child Workflows
+      * Testing Workflows and Activities
+        * Mock Activities
+        * Replay from history
