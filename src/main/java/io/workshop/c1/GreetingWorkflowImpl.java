@@ -18,11 +18,12 @@ public class GreetingWorkflowImpl implements GreetingWorkflow {
         logger.info("My runId" + Workflow.getInfo().getRunId());
         logger.info("My task queue: " + Workflow.getInfo().getTaskQueue());
 
-        //if(customer != null) {
+//        if(customer != null) {
             this.customer = customer;
-        //}
+//        }
 
         Workflow.sleep(Duration.ofSeconds(5));
+
         return "Hello " + this.customer.getName();
     }
 

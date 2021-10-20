@@ -12,7 +12,7 @@
 * [Using SDK in your applications](#Using-SDK)
 * [Temporal Server](#Temporal-Server)
 * [tctl (CLI)](#tctl)
-* [Writign a simple Workflows](#Simple-Workflows)  
+* [Writing a simple Workflows](#Simple-Workflows)  
 * [Invoking workflows - Client API](#Client-API)
 * [Workers](#Workers)
 * [Workflows, deeper look](#Workflows-Revisited)
@@ -200,6 +200,9 @@ tctl cluster health
             * Workflow replays (from history) up until workflow run timeout (waits for fix)
 * Workflow retries
     * Each retry is a new workflow run (new runid)
+* Workflow reset
+    *  Currently supports only resetting to WorkflowTaskStarted
+    
 
 <p align="center">
 <img src="../../../../../../media/c1/c1-clientapi.png" width="450"/>
