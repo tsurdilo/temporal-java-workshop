@@ -1,4 +1,4 @@
-package io.workshop.c1;
+package io.workshop.s1;
 
 import io.temporal.api.history.v1.HistoryEvent;
 import io.temporal.api.workflow.v1.WorkflowExecutionInfo;

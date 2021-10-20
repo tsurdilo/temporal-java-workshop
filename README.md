@@ -10,7 +10,7 @@
 
 ## Chapters
 
-### 1. [Getting Started](src/main/java/io/workshop/c1/README.md)
+### 1. [Getting Started](src/main/java/io/workshop/s1/README.md)
 
 * Prerequisites
 * Core concepts

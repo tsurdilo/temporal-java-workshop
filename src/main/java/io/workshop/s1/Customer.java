@@ -1,4 +1,4 @@
-package io.workshop.c1;
+package io.workshop.s1;
 
 public class Customer {
     private String name;

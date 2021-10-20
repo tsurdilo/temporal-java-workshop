@@ -1,18 +1,16 @@
-package io.workshop.c1;
+package io.workshop.s1;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
-import io.temporal.common.RetryOptions;
-import io.temporal.failure.ApplicationFailure;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static io.workshop.c1.WFUtils.client;
-import static io.workshop.c1.WFUtils.taskQueue;
+import static io.workshop.s1.WFUtils.client;
+import static io.workshop.s1.WFUtils.taskQueue;
 
 
 public class GreetingStarter {
@@ -36,9 +34,15 @@ public class GreetingStarter {
 
         //startAsyncGetResultInAnotherProcessUnTyped();
 
-        signalWithStart();
+        //signalWithStart();
 
         //startAsCronAsync();
+
+        startAndTerminate();
+
+        //startAndSignal(); TODO
+
+        //startAndQuery(); TODO
 
         System.exit(0);
     }
@@ -209,6 +213,30 @@ public class GreetingStarter {
 
         // start async, not blocking
         WorkflowClient.start(workflow::greet, customer);
+    }
+
+    public static void startAndTerminate() {
+        // Workflow client stub
+        // Stub is per per workflow instance - create new stub for each
+        GreetingWorkflow workflow = client.newWorkflowStub(
+                GreetingWorkflow.class,
+                WorkflowOptions.newBuilder()
+                        .setWorkflowId(workflowId)
+                        //.setWorkflowExecutionTimeout(Duration.ofSeconds(20))
+                        //.setWorkflowRunTimeout(Duration.ofSeconds(20))
+                        .setTaskQueue(taskQueue)
+                        .setCronSchedule("@every 10s")
+                        .build()
+        );
+
+        // start async, not blocking
+        WorkflowClient.start(workflow::greet, customer);
+
+        // Terminate it
+        WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
+        untyped.terminate("Workshop reasons...");
+
+        printWorkflowStatus();
     }
 
     private static void printWorkflowStatus() {

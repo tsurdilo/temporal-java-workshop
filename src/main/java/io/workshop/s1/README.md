@@ -171,19 +171,22 @@ tctl cluster health
         * io.temporal.workflow.WorkflowLocal
         * io.temporal.workflow.WorkflowThreadLocal
     * Don't use synchronized lists
-    * Don't use unordered collections (when looping over results of async activities/child workflows)
+    * Don't use unordered collections (when iterating data and calling activity / child workflow for each data element)
     * Don't use non-deterministic functions (random nums, uuid, etc), rather use:
         * Workflow.newRandom()
         * Workflow.randomUUID()
         * [Workflow.sideEffect(...)](https://github.com/temporalio/samples-java/blob/master/src/main/java/io/temporal/samples/hello/HelloSideEffect.java#L135)
-    * Don't use native Java Threads (no Thread.sleep, sorry :) ), but rather
+    * Don't use native Java Threads / ExecutorService (no Thread.sleep, sorry :) ), but rather
         * Async.function(...)
         * Async.procedure(...)
         * Workflow.sleep
 
 * Workflow limitations
     * Input / Results
+      * 2MB Max / 256KB Warning
     * History size
+        * 50K Events in history / warning each 10K
+        * Can mitigate this via [continueAsNew](https://docs.temporal.io/docs/java/workflows/#large-event-histories) and also child workflows
 
 * Workflow Statuses
     * Running
@@ -240,7 +243,9 @@ tctl cluster health
     * Each retry is a new workflow run (new runid)
 * Workflow reset
     *  Currently supports only resetting to WorkflowTaskStarted
-    
+* Terminating workflows
+* Signalling workflows
+* Querying workflows
 
 <p align="center">
 <img src="../../../../../../media/c1/c1-clientapi.png" width="450"/>

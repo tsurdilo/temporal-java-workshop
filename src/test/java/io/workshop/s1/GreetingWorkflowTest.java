@@ -1,4 +1,4 @@
-package io.workshop.c1;
+package io.workshop.s1;
 
 import io.temporal.client.WorkflowOptions;
 import io.temporal.testing.TestWorkflowRule;
