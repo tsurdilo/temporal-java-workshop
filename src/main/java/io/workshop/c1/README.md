@@ -1,10 +1,10 @@
 # Workshop 1 - Getting Started
 
-* [Chapter 1](#Chapter-1)
-* [Chapter 2](#Chapter-2)
-* Chapter 3 TBDs
+* [Section 1](#Section-1)
+* [Section 2](#Section-2)
+* Section 3 TBDs
 
-# Chapter 1
+# Section 1
 
 ## In this chapter we will learn about:
 

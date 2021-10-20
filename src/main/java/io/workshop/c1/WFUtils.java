@@ -14,7 +14,7 @@ public class WFUtils {
     public static final WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
     public static final WorkflowClient client = WorkflowClient.newInstance(service);
     public static final String taskQueue = "c1TaskQueue";
-    
+
     /**
      * Prints workflow executions, given a provided query. Note this requires ES.
      * For non-es use ListOpenWorkflowExecutionsRequest and ListClosedWorkflowExecutionRequest
