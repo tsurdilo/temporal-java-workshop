@@ -1,5 +1,6 @@
 package io.workshop.c1;
 
+import io.temporal.internal.sync.WorkflowThread;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
 

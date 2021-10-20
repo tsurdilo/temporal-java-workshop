@@ -12,16 +12,17 @@
 * [Using SDK in your applications](#Using-SDK)
 * [Temporal Server](#Temporal-Server)
 * [tctl (CLI)](#tctl)
-* [Writing a simple Workflows](#Simple-Workflows)  
+* [Workflows, getting started](#Getting-Started-With-Workflows)  
+* [Client API](#Client-API)
 * [Invoking workflows - Client API](#Client-API)
 * [Workers](#Workers)
-* [Workflows, deeper look](#Workflows-Revisited)
 * [Activities](#Activities)
 * [Child Workflows](#Child-Workflows)
 * [Testing Workflows and Activities](#Testing)
 
 ### Prerequisites
-* Java Installed (version 11 or higher)
+
+* Java (version 11 or higher)
 * [Apache Maven](https://maven.apache.org/download.cgi) (latest)
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (latest)
 * [Docker Compose](https://docs.docker.com/compose/install/) (latest)
@@ -30,9 +31,10 @@
 
 ### Temporal Java SDK
 
-#### Overview
-
-* APIs (Client / Workflow / Testing)
+* Provided APIs:
+    * Client
+    * Workflow
+    * Testing
 
 1. [GitHub Repo](https://github.com/temporalio/sdk-java)
 2. [Maven Central](https://search.maven.org/search?q=io.temporal)
@@ -124,6 +126,8 @@ docker volume prune
 
 ### tctl
 
+* [Documentation](https://docs.temporal.io/docs/system-tools/tctl/)
+
 * Install CLI via HomeBrew:
 
 ```
@@ -131,6 +135,7 @@ brew install tctl
 ``` 
 
 * [Other ways to install](https://docs.temporal.io/docs/system-tools/tctl/#run-the-cli)
+
 * Check tctl version:
 
 ```
@@ -143,9 +148,9 @@ tctl -version
 tctl cluster health
 ```
 
-### Simple Workflows
+### Getting Started With Workflows
 
-#### Overview
+* [Defining Workflows Blog](https://docs.temporal.io/blog/defining-workflows)
 
 * Workflow Interface - @WorkflowInterface
 * Workflow Type
@@ -156,9 +161,42 @@ tctl cluster health
 * Logger - Workflow.getLogger
 * WorkflowInfo - Workflow.getInfo
 
-### Client API
+* Determinism
+  
 
-#### Overview
+* [Implementation Constraints](https://docs.temporal.io/docs/java/workflows#workflow-implementation-constraints)
+    * Dont' use mutable global state
+    * Don't ue explicit synchronization
+    * Static Fields
+        * io.temporal.workflow.WorkflowLocal
+        * io.temporal.workflow.WorkflowThreadLocal
+    * Don't use synchronized lists
+    * Don't use unordered collections (when looping over results of async activities/child workflows)
+    * Don't use non-deterministic functions (random nums, uuid, etc), rather use:
+        * Workflow.newRandom()
+        * Workflow.randomUUID()
+        * [Workflow.sideEffect(...)](https://github.com/temporalio/samples-java/blob/master/src/main/java/io/temporal/samples/hello/HelloSideEffect.java#L135)
+    * Don't use native Java Threads (no Thread.sleep, sorry :) ), but rather
+        * Async.function(...)
+        * Async.procedure(...)
+        * Workflow.sleep
+
+* Workflow limitations
+    * Input / Results
+    * History size
+
+* Workflow Statuses
+    * Running
+    * Completed
+    * Failed
+    * Cancelled
+    * Terminated
+    * ContinuedAsNew
+    * TimedOut
+    
+* Retention Period
+
+### Client API
 
 * gRPC communication to Temporal server
 * Workflow client stub
@@ -217,31 +255,11 @@ tctl cluster health
 
 ### Workers
 
-#### Overview
-
 * WorkerFactory
 * WorkerOptions
 * Worker
     * TaskQueue
     * Register Workflow impls
-    
-### Workflows Revisited
-
-#### Overview
-
-* Workflow Statuses
-    * Running
-    * Completed
-    * Failed
-    * Cancelled
-    * Terminated
-    * ContinuedAsNew
-    * TimedOut
-
-* Retention Period
-  
-* Determinism
-
     
 ### Activities
 
