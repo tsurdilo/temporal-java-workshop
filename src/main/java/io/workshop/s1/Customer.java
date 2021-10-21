@@ -1,17 +1,22 @@
 package io.workshop.s1;
 
+/**
+ * Simple customer pojo
+ */
 public class Customer {
     private String name;
     private String title;
-    private String language;
+    private String languages;
+    private int age;
 
     public Customer() {
     }
 
-    public Customer(String name, String title, String language) {
+    public Customer(String name, String title, String languages, int age) {
         this.name = name;
         this.title = title;
-        this.language = language;
+        this.languages = languages;
+        this.age = age;
     }
 
     public String getName() {
@@ -30,11 +35,24 @@ public class Customer {
         this.title = title;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getLanguages() {
+        return languages;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setLanguages(String languages) {
+        this.languages = languages;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + getName() + " Title: " + getTitle() + " Languages: " + getLanguages() + " Age: " + getAge();
     }
 }

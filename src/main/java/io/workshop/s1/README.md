@@ -1,4 +1,4 @@
-# Workshop 1 - Getting Started
+# Java SDK Workshop - Chapter 1 -Getting Started
 
 * [Section 1](#Section-1)
 * [Section 2](#Section-2)
@@ -12,10 +12,10 @@
 * [Using SDK in your applications](#Using-SDK)
 * [Temporal Server](#Temporal-Server)
 * [tctl (CLI)](#tctl)
-* [Workflows, getting started](#Getting-Started-With-Workflows)  
-* [Client API](#Client-API)
-* [Invoking workflows - Client API](#Client-API)
+* [Workflows, getting started](#Getting-Started-With-Workflows)
 * [Workers](#Workers)
+* [Interacting with workflows - Client API](#Interacting-with-workflows)
+* [Search Attributes](#Search-Attributes)
 * [Activities](#Activities)
 * [Child Workflows](#Child-Workflows)
 * [Testing Workflows and Activities](#Testing)
@@ -108,9 +108,11 @@ cd docker-compose
 docker-compose -f docker-compose-cas-es.yml up
 ```   
 
+Note: for workshop samples to all run we need Elasticsearch enabled
+
 * [Temporal Docker Compose GitHub Repo](https://github.com/temporalio/docker-compose)
 * [Temporal Helm Charts Repo](https://github.com/temporalio/helm-charts)
-* [Video](https://www.youtube.com/watch?v=f6N3ZcWHygU)
+* [Installing and Running Temporal Server on Docker Compose and Minikube Video](https://www.youtube.com/watch?v=f6N3ZcWHygU)
 
 * Look at [Web UI](http://localhost:808/)
 * Useful Docker commands for cleaning up **DEV** environment:
@@ -183,7 +185,7 @@ tctl cluster health
 
 * Workflow limitations
     * Input / Results
-      * 2MB Max / 256KB Warning
+      * [2MB Max / 256KB Warning](https://github.com/temporalio/temporal/blob/37799989ae6ff0e32be7f8803fb0b6d7b6eb1087/service/history/configs/config.go#L386)
     * History size
         * 50K Events in history / warning each 10K
         * Can mitigate this via [continueAsNew](https://docs.temporal.io/docs/java/workflows/#large-event-histories) and also child workflows
@@ -199,7 +201,15 @@ tctl cluster health
     
 * Retention Period
 
-### Client API
+### Workers
+
+* WorkerFactory
+* WorkerOptions
+* Worker
+    * TaskQueue
+    * Register Workflow impls
+
+### Interacting with workflows
 
 * gRPC communication to Temporal server
 * Workflow client stub
@@ -211,7 +221,7 @@ tctl cluster health
 * WorkflowServiceStubs
 * WorkflowService
 * Workflow stubs
-* Workflow Options
+* [Workflow Options](https://github.com/tsurdilo/temporal-sdk-options)
   * Workflow Id
   * Task Queue
 * Starting workflows
@@ -258,14 +268,21 @@ tctl cluster health
     * Discuss long-running workflow
 * Discuss polyglot aspect of Temporal (in terms of client)
 
-### Workers
+### Search Attributes
+* Custom key-value pairs
+* Can be added to workflow metadata
+* Integrated with Elasticsearch
+* Some pre-defined search attributes exist:
+    * ```tctl cluster get-search-attributes```
+* Can be added / changed after workflow starts
 
-* WorkerFactory
-* WorkerOptions
-* Worker
-    * TaskQueue
-    * Register Workflow impls
-    
+* Add search attributes via tctl:
+```
+tctl admin cluster add-search-attributes --name CustomerTitle --type String
+tctl admin cluster add-search-attributes --name CustomerLanguages --type String
+tctl admin cluster add-search-attributes --name CustomerAge --type Int
+```
+
 ### Activities
 
 #### Overview

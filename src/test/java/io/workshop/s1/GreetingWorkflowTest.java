@@ -15,7 +15,7 @@ public class GreetingWorkflowTest {
                     .setWorkflowTypes(GreetingWorkflowImpl.class)
                     .build();
 
-    private Customer testCustomer = new Customer("Elisabeth", "Ms.", "English");
+    private Customer testCustomer = new Customer("Elisabeth", "Ms.", "English Spansh", 22);
 
     @Test
     public void testActivity() {
