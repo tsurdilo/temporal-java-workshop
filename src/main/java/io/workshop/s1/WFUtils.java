@@ -30,6 +30,7 @@ public class WFUtils {
      * @param query
      */
     private static void printWorkflowExecutions(String query) {
+        // TODO pagination
         ListWorkflowExecutionsRequest listWorkflowExecutionRequest =
                 ListWorkflowExecutionsRequest.newBuilder()
                         .setNamespace(client.getOptions().getNamespace())

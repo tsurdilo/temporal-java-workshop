@@ -14,6 +14,8 @@ class NotifyUserAccountsWorkflow implements NotifyUserAccountsWorkflowInterface
 
     private LoggerInterface $logger;
 
+    private int $customerCount = 0;
+
     public function __construct()
     {
         $this->logger = new Logger();
@@ -22,12 +24,19 @@ class NotifyUserAccountsWorkflow implements NotifyUserAccountsWorkflowInterface
     public function notify(array $accountIds): \Generator
     {
         foreach ($accountIds as &$acid) {
+            $this->customerCount++;
             $this->log("PHP: notifying for:  %s", $acid);
             yield Workflow::timer(CarbonInterval::seconds(2));
         }
 
         return "done";
     }
+
+    public function getCount(): int
+    {
+        return $this->customerCount;
+    }
+
 
     private function log(string $message, ...$arg)
     {

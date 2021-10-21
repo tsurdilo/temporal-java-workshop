@@ -8,6 +8,7 @@
 
 ## In this chapter we will learn about:
 
+* [Workshop / Dev env Prerequisites](#Prerequisites)
 * [Temporal Java SDK](#Temporal-Java-SDK)
 * [Using SDK in your applications](#Using-SDK)
 * [Temporal Server](#Temporal-Server)
@@ -17,15 +18,20 @@
 * [Interacting with workflows - Client API](#Interacting-with-workflows)
 * [Search Attributes](#Search-Attributes)
 * [Activities](#Activities)
+  * retried by default
+  * 
 * [Child Workflows](#Child-Workflows)
 * [Testing Workflows and Activities](#Testing)
+    * long sleep
 
 ### Prerequisites
 
-* Java (version 11 or higher)
-* [Apache Maven](https://maven.apache.org/download.cgi) (latest)
-* [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (latest)
-* [Docker Compose](https://docs.docker.com/compose/install/) (latest)
+* Java (version 8 or higher)
+* Maven / Gradle 
+  * [Apache Maven](https://maven.apache.org/download.cgi) 
+  * [Gradle](https://gradle.org/)
+* [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) 
+* [Docker Compose](https://docs.docker.com/compose/install/) 
     * [Video](https://www.youtube.com/watch?v=f6N3ZcWHygU)
 * IDE (IntelliJ, VSCode, Eclipse, ...)
 
@@ -100,6 +106,16 @@ Gradle:
 
 ### Temporal Server
 
+* Server Components
+![Temporal Server](../../../../../../media/c1/c1-server.png)
+
+* From dev perspective
+![Temporal Server](../../../../../../media/c1/c1-server-developer-pov.png)
+
+
+* [Github Repo](https://github.com/temporalio/temporal)
+
+
 * Run on Docker Compose
 
 ```
@@ -116,15 +132,11 @@ Note: for workshop samples to all run we need Elasticsearch enabled
 
 * Look at [Web UI](http://localhost:808/)
 * Useful Docker commands for cleaning up **DEV** environment:
-
+  (note stop the Temporal server before you run this :) )
 ```
 docker system prune -a
 docker volume prune
 ```
-
-<p align="center">
-<img src="../../../../../../media/c1/c1-server.png" width="400"/>
-</p>
 
 ### tctl
 
@@ -152,19 +164,39 @@ tctl cluster health
 
 ### Getting Started With Workflows
 
-* [Defining Workflows Blog](https://docs.temporal.io/blog/defining-workflows)
+* Programming-language model
+    * [Defining Workflows Blog](https://docs.temporal.io/blog/defining-workflows)
 
-* Workflow Interface - @WorkflowInterface
-* Workflow Type
-* Workflow method -  @WorkflowMethod
-* Signal methods - @SignalMethod
-* Query methods - @QueryMethod
-* Workflow Implementation
-* Logger - Workflow.getLogger
-* WorkflowInfo - Workflow.getInfo
+* [GreetingStarter Workflow](GreetingStarter.java)
+    * Workflow Interface - @WorkflowInterface
+    * Workflow Type
+    * Workflow method -  @WorkflowMethod
+    * Signal methods - @SignalMethod
+    * Query methods - @QueryMethod
+    * Workflow Implementation
+    * Logger - Workflow.getLogger
+    * WorkflowInfo - Workflow.getInfo
 
-* Determinism
-  
+* Workflow Features
+    * Have state
+    * Can be long-running
+    * Are fault-tolerant
+    * Can be resumed in case of failures (infra, etc)
+    * Can be invoked sync/async via SDK client apis
+    * Can be multi-threaded
+    
+* Workflow "magic" - Durability (ability to resume after failure)
+  * [Durability demo (PHP -> Java)](https://community.temporal.io/t/temporal-workflow-resumability/2838/3)
+  * How? 
+    * Temporal uses [Event Sourcing pattern](https://martinfowler.com/eaaDev/EventSourcing.html)
+        * All changes during workflow execution are recorded as events
+        * Events can be replayed to restore state after failure
+        * Temporal optimizations (caching)
+  * "Magic" comes at a price:
+        * workflows must be deterministic
+        * workflows api has implementation constraints
+
+
 
 * [Implementation Constraints](https://docs.temporal.io/docs/java/workflows#workflow-implementation-constraints)
     * Dont' use mutable global state
@@ -182,6 +214,9 @@ tctl cluster health
         * Async.function(...)
         * Async.procedure(...)
         * Workflow.sleep
+
+* What about scale?
+  
 
 * Workflow limitations
     * Input / Results
@@ -210,6 +245,8 @@ tctl cluster health
     * Register Workflow impls
 
 ### Interacting with workflows
+
+![Client API](../../../../../../media/c1/c1-clientapi.png)
 
 * gRPC communication to Temporal server
 * Workflow client stub

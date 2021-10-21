@@ -38,7 +38,9 @@ public class GreetingStarter {
 
         //startAsyncGetResultInAnotherProcessUnTyped();
 
-        //signalWithStart();
+        signalWithStart();
+        // show that second time it will just signal -- good for lazy creation
+        // arguments ignored
 
         //startAsCronAsync();
 
@@ -50,7 +52,7 @@ public class GreetingStarter {
 
         //startAndQueryCompleted();
 
-        startWithSearchAttributes();
+        //startWithSearchAttributes();
 
         System.exit(0);
     }
