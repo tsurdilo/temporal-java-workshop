@@ -12,7 +12,7 @@ public class GreetingWorker {
 
         WorkflowImplementationOptions workflowImplementationOptions =
                 WorkflowImplementationOptions.newBuilder()
-                        //.setFailWorkflowExceptionTypes(NullPointerException.class)
+                        .setFailWorkflowExceptionTypes(NullPointerException.class)
                         .build();
 
         WorkerFactory workerFactory = WorkerFactory.newInstance(client);

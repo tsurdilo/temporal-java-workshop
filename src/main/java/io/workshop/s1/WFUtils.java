@@ -128,7 +128,7 @@ public class WFUtils {
 
         // for search attributes
         // Customer workflows where customer is over 20
-        printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20");
+        //printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20");
         // Customer workflows where customer title is Ms and age is over 30
         //printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20 AND CustomerTitle='Ms'");
         // Customer workflows where customer speaks Spanish
@@ -136,5 +136,9 @@ public class WFUtils {
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
         //resetWorkflow(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4", 9);
+
+        // 1) for signalWithStart and NPE  -- dont forget to fix issue and restart worker before restarting!!
+        printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "06c1c822-2e3e-40ba-94f2-95564c3f7d0d");
+        resetWorkflow(client, "c1GreetingWorkflow", "06c1c822-2e3e-40ba-94f2-95564c3f7d0d", 9);
     }
 }

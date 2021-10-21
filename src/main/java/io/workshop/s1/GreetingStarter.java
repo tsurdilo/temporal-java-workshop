@@ -4,7 +4,9 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
+import io.temporal.common.RetryOptions;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -38,9 +40,11 @@ public class GreetingStarter {
 
         //startAsyncGetResultInAnotherProcessUnTyped();
 
-        signalWithStart();
-        // show that second time it will just signal -- good for lazy creation
-        // arguments ignored
+        //signalWithStart();
+
+        signalWithStartWithNPE();
+
+        //multipleSignalWithStart();
 
         //startAsCronAsync();
 
@@ -188,17 +192,69 @@ public class GreetingStarter {
         WorkflowOptions.newBuilder()
                 .setWorkflowId(workflowId)
                 .setTaskQueue(taskQueue)
-//                .setRetryOptions(RetryOptions.newBuilder()
-//                        .setMaximumAttempts(3)
-//                        .build())
                 .build());
 
-        untypedWorkflowStub.signalWithStart("setCustomer", new Object[] {customer1}, null);
+        untypedWorkflowStub.signalWithStart("setCustomer", new Object[] {customer2}, new Object[] {customer1});
 
         printWorkflowStatus();
 
         try {
             String greeting = untypedWorkflowStub.getResult(String.class);
+            printWorkflowStatus();
+            System.out.println("Greeting: " + greeting);
+        } catch(WorkflowFailedException e) {
+            System.out.println("Workflow failed: " + e.getCause().getMessage());
+            printWorkflowStatus();
+        }
+    }
+
+    public static void signalWithStartWithNPE() {
+        // WorkflowStub is a client-side stub to a single workflow instance
+        WorkflowStub untypedWorkflowStub = client.newUntypedWorkflowStub("GreetingWorkflow",
+                WorkflowOptions.newBuilder()
+                        .setWorkflowId(workflowId)
+                        .setTaskQueue(taskQueue)
+                        // Rely on workflow timeouts for retries, not max attempts!
+                         //.setWorkflowExecutionTimeout(Duration.ofSeconds(20))
+//                        .setRetryOptions(RetryOptions.newBuilder()
+//                            // can set max attempts but better to use timeouts ;)
+//                            .setMaximumAttempts(3)
+//                        .build())
+                        .build());
+
+        untypedWorkflowStub.signalWithStart("setCustomer", new Object[] {customer2}, null);
+
+        printWorkflowStatus();
+
+        try {
+            String greeting = untypedWorkflowStub.getResult(String.class);
+            printWorkflowStatus();
+            System.out.println("Greeting: " + greeting);
+        } catch(WorkflowFailedException e) {
+            System.out.println("Workflow failed: " + e.getCause().getMessage());
+            printWorkflowStatus();
+        }
+    }
+
+    public static void multipleSignalWithStart() {
+        Customer origCustomer = customer1;
+
+        WorkflowStub workflowStub = null;
+
+        for(Customer customer : allCustomers) {
+            workflowStub = client.newUntypedWorkflowStub("GreetingWorkflow",
+                    WorkflowOptions.newBuilder()
+                            .setWorkflowId(workflowId)
+                            .setTaskQueue(taskQueue)
+                            .build());
+
+            workflowStub.signalWithStart("setCustomer", new Object[] {customer}, new Object[] {origCustomer});
+        }
+
+        printWorkflowStatus();
+
+        try {
+            String greeting = workflowStub.getResult(String.class);
             printWorkflowStatus();
             System.out.println("Greeting: " + greeting);
         } catch(WorkflowFailedException e) {
