@@ -5,6 +5,7 @@ import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkflowImplementationOptions;
 
 import static io.workshop.s1.WFUtils.client;
+import static io.workshop.s1.WFUtils.taskQueue;
 
 public class GreetingWorker {
     public static void main(String[] args) {
@@ -15,7 +16,7 @@ public class GreetingWorker {
                         .build();
 
         WorkerFactory workerFactory = WorkerFactory.newInstance(client);
-        Worker worker = workerFactory.newWorker("c1TaskQueue");
+        Worker worker = workerFactory.newWorker(taskQueue);
 
         // Can be called multiple times
         worker.registerWorkflowImplementationTypes(workflowImplementationOptions, GreetingWorkflowImpl.class);

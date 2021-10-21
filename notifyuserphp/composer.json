@@ -1,0 +1,15 @@
+{
+  "minimum-stability": "beta",
+  "require": {
+    "temporal/sdk": ">=1.0",
+    "spiral/tokenizer": ">=2.7",
+    "grpc/grpc": "^v1.27.0",
+    "google/protobuf": "^v3.3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Temporal\\Workshop\\": "src",
+      "Temporal\\WorkshopUtils\\": "util-src"
+    }
+  }
+}

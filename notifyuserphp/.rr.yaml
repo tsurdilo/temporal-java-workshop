@@ -1,0 +1,18 @@
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+server:
+  command: "php worker.php"
+
+temporal:
+  address: "localhost:7233"
+  activities:
+    num_workers: 1
+
+logs:
+  level: debug
+  channels:
+    temporal:
+      level: error
+    informer:
+      mode: none
