@@ -4,8 +4,8 @@ import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkflowImplementationOptions;
 
-import static io.workshop.s1.WFUtils.client;
-import static io.workshop.s1.WFUtils.taskQueue;
+import static io.workshop.s1.S1WFUtils.client;
+import static io.workshop.s1.S1WFUtils.taskQueue;
 
 public class GreetingWorker {
     public static void main(String[] args) {

@@ -4,15 +4,13 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
-import io.temporal.common.RetryOptions;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static io.workshop.s1.WFUtils.client;
-import static io.workshop.s1.WFUtils.taskQueue;
+import static io.workshop.s1.S1WFUtils.client;
+import static io.workshop.s1.S1WFUtils.taskQueue;
 
 public class GreetingStarter {
 
@@ -30,7 +28,7 @@ public class GreetingStarter {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        //startTypedAndWaitForResult();
+        startTypedAndWaitForResult();
 
         //startAsyncExpectWaitForResult();
 
@@ -42,7 +40,7 @@ public class GreetingStarter {
 
         //signalWithStart();
 
-        signalWithStartWithNPE();
+        //signalWithStartWithNPE();
 
         //multipleSignalWithStart();
 
@@ -297,6 +295,7 @@ public class GreetingStarter {
         // start async, not blocking
         WorkflowClient.start(workflow::greet, customer1);
 
+        printWorkflowStatus();
         // Terminate it
         WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
         untyped.terminate("Workshop reasons...");
@@ -408,6 +407,6 @@ public class GreetingStarter {
     }
 
     private static void printWorkflowStatus() {
-        System.out.println("Workflow Status: " + WFUtils.getWorkflowStatus(client, workflowId));
+        System.out.println("Workflow Status: " + S1WFUtils.getWorkflowStatus(client, workflowId));
     }
 }

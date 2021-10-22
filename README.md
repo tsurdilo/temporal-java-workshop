@@ -12,19 +12,8 @@
 
 ### 1. [Getting Started](src/main/java/io/workshop/s1/README.md)
 
-* Prerequisites
-* Core concepts
-    * Workflows
-    * Invoking Workflows (Client API)
-    * Workers
-    * Workflow Exceptions
-    * Restarting Workflows
-    * Activities
-    * Child Workflows
-    * Testing Workflows and Activities
-        * Mock Activities
-        * Replay from history
-* Testing
+* [Section 1](src/main/java/io/workshop/s1/README.md#section-1)
+* [Section 2](src/main/java/io/workshop/s1/README.md#section-2)
 
 
 

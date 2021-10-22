@@ -11,7 +11,7 @@ import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
 import java.util.Optional;
 
-public class WFUtils {
+public class S1WFUtils {
 
     // Initializes all gRPC stubs (connection, blocking, future)
     // Note: by default target set to 127.0.0.1:7233, can change via workflowServiceStubsOptions
@@ -124,21 +124,22 @@ public class WFUtils {
     }
 
     public static void main(String[] args) {
-        //printWorkflowExecutions("ExecutionStatus='Completed'");
-
-        // for search attributes
-        // Customer workflows where customer is over 20
-        //printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20");
-        // Customer workflows where customer title is Ms and age is over 30
-        //printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20 AND CustomerTitle='Ms'");
-        // Customer workflows where customer speaks Spanish
-        //printWorkflowExecutionsAndShowCustomerInfo("CustomerLanguages LIKE \"%Spanish\"");
-
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
         //resetWorkflow(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4", 9);
 
         // 1) for signalWithStart and NPE  -- dont forget to fix issue and restart worker before restarting!!
         printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "06c1c822-2e3e-40ba-94f2-95564c3f7d0d");
         resetWorkflow(client, "c1GreetingWorkflow", "06c1c822-2e3e-40ba-94f2-95564c3f7d0d", 9);
+
+//        // 2) for searchAttributes
+//        // Using built-in search attributes
+//        printWorkflowExecutions("ExecutionStatus='Completed'");
+//        // Customer workflows where customer is over 20
+//        printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20");
+//        // Customer workflows where customer title is Ms and age is over 30
+//        printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20 AND CustomerTitle='Ms'");
+//        // Customer workflows where customer speaks Spanish
+//        printWorkflowExecutionsAndShowCustomerInfo("CustomerLanguages LIKE \"%Spanish\"");
+
     }
 }

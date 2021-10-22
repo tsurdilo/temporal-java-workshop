@@ -2,7 +2,6 @@
 
 * [Section 1](#Section-1)
 * [Section 2](#Section-2)
-* Section 3 TBDs
 
 # Section 1
 
@@ -17,12 +16,6 @@
 * [Workers](#Workers)
 * [Interacting with workflows - Client API](#Interacting-with-workflows)
 * [Search Attributes](#Search-Attributes)
-* [Activities](#Activities)
-  * retried by default
-  * 
-* [Child Workflows](#Child-Workflows)
-* [Testing Workflows and Activities](#Testing)
-    * long sleep
 
 ### Prerequisites
 
@@ -195,9 +188,7 @@ tctl cluster health
   * "Magic" comes at a price:
         * workflows must be deterministic
         * workflows api has implementation constraints
-
-
-
+    
 * [Implementation Constraints](https://docs.temporal.io/docs/java/workflows#workflow-implementation-constraints)
     * Dont' use mutable global state
     * Don't ue explicit synchronization
@@ -215,17 +206,19 @@ tctl cluster health
         * Async.procedure(...)
         * Workflow.sleep
 
-* What about scale?
-  
-
-* Workflow limitations
+* What about scalability of workflows?
+  * Temporal scales out with the number of workflow executions (instances)
+  * Tested up to a couple of hundred million open workflows (can go much higher)
+  * Temporal does not scale up the size of single workflow execution.
+    
+* Workflow limitations:
     * Input / Results
       * [2MB Max / 256KB Warning](https://github.com/temporalio/temporal/blob/37799989ae6ff0e32be7f8803fb0b6d7b6eb1087/service/history/configs/config.go#L386)
     * History size
         * 50K Events in history / warning each 10K
         * Can mitigate this via [continueAsNew](https://docs.temporal.io/docs/java/workflows/#large-event-histories) and also child workflows
 
-* Workflow Statuses
+* Workflow Statuses:
     * Running
     * Completed
     * Failed
@@ -234,7 +227,10 @@ tctl cluster health
     * ContinuedAsNew
     * TimedOut
     
-* Retention Period
+* Retention Period:
+    * Min: 1 day
+    * Max: 30 days
+    * Default: 2 days
 
 ### Workers
 
@@ -319,6 +315,18 @@ tctl admin cluster add-search-attributes --name CustomerTitle --type String
 tctl admin cluster add-search-attributes --name CustomerLanguages --type String
 tctl admin cluster add-search-attributes --name CustomerAge --type Int
 ```
+
+
+# Section 2
+
+## In this chapter we will learn about:
+
+* [Activities](#Activities)
+    * retried by default
+    *
+* [Child Workflows](#Child-Workflows)
+* [Testing Workflows and Activities](#Testing)
+    * long sleep
 
 ### Activities
 
