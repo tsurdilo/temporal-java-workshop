@@ -17,6 +17,9 @@ public class ContentLengthActivityImpl implements ContentLengthActivity {
         System.out.println("Activity Type: " +  Activity.getExecutionContext().getInfo().getActivityType());
         System.out.println("Called from workflow: " + Activity.getExecutionContext().getInfo().getWorkflowType());
 
+        // In case of retries you can get the attempt count
+        // Activity.getExecutionContext().getInfo().getAttempt();
+
         try {
             URL website = new URL(url);
             Scanner sc = new Scanner(website.openStream());

@@ -371,7 +371,11 @@ tctl admin cluster add-search-attributes --name CustomerAge --type Int
 
 ## Child Workflows
 
-* Invoking sync/async
+* Are workflows too :) 
+* Invoked from "parent" workflows
+* Can have own timeouts
+* Can be scheduled (cron)
+* Parent can define ParentClosePolicy (default terminate)
 
 # Section 6
 
