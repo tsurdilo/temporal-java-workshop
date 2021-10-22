@@ -6,6 +6,7 @@ import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
 import io.temporal.workflow.Async;
 import io.temporal.workflow.Promise;
+import io.temporal.workflow.Saga;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class ContentLengthWorkflowImpl implements ContentLengthWorkflow {
 
     private Logger logger = Workflow.getLogger(this.getClass().getName());
+    private ContentLengthInfo defaultInfo;
 
     private final ContentLengthActivity activities =
             Workflow.newActivityStub(
@@ -28,13 +30,11 @@ public class ContentLengthWorkflowImpl implements ContentLengthWorkflow {
                             // Maximum time of a single Activity execution attempt.
                             .setStartToCloseTimeout(Duration.ofSeconds(5))
 
-                            .setRetryOptions(RetryOptions.newBuilder()
-                                    .setMaximumAttempts(1)
-                                    .build())
                             .build());
 
     @Override
     public ContentLengthInfo execute() {
+
         return invokeAndWaitForResult();
 
         //return invokeAsyncAndWaitForResult();
@@ -48,6 +48,8 @@ public class ContentLengthWorkflowImpl implements ContentLengthWorkflow {
         //return invokeWithRetries();
 
         //return invokeNoRetriesHandleError();
+
+        //return invokeNoRetryHandleErrorWithSaga();
     }
 
     private ContentLengthInfo invokeAndWaitForResult() {
@@ -132,5 +134,32 @@ public class ContentLengthWorkflowImpl implements ContentLengthWorkflow {
             logger.warn("Error: " + failure.getCause().getMessage());
             return new ContentLengthInfo();
         }
+    }
+
+    private ContentLengthInfo invokeNoRetryHandleErrorWithSaga() {
+        // NOTE TO SELF - set max attempts to 1 :)
+
+        // define a Saga object. supports parallel! if not parallel then its reverse order
+        Saga saga = new Saga(new Saga.Options.Builder().setParallelCompensation(false).build());
+        // add compensation steps to saga -- note you can have multiple
+        // compensation can include activity executions
+        saga.addCompensation(this::getDefaultCount);
+        // but it can also include any arbitrary logic
+        saga.addCompensation(
+                () -> logger.info("Performing first step of compensation!"));
+
+        try {
+            return activities.count("DOESNOTEXIST");
+        } catch (ActivityFailure failure) {
+            logger.warn("Error: " + failure.getCause().getMessage());
+
+            // Note - compensation is manually triggered, not automatic
+            saga.compensate();
+            return defaultInfo;
+        }
+    }
+
+    private void getDefaultCount() {
+        defaultInfo =  activities.count("https://temporal.io/");
     }
 }

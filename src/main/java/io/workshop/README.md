@@ -365,6 +365,8 @@ tctl admin cluster add-search-attributes --name CustomerAge --type Int
 * Limitations
  * Similar to workflows (data input / output size)
 
+* Compensation (SAGA)
+
 # Section 5
 
 ## Child Workflows

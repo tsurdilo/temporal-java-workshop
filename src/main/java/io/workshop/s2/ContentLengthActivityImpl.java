@@ -13,9 +13,9 @@ public class ContentLengthActivityImpl implements ContentLengthActivity {
     public ContentLengthInfo count(String url) {
 
         // Activity execution context is your friend :)
-        System.out.println("Activity id: " + Activity.getExecutionContext().getInfo().getActivityId());
-        System.out.println("Called from workflow  id: " + Activity.getExecutionContext().getInfo().getWorkflowId());
-        System.out.println("Called from workflow with type: " + Activity.getExecutionContext().getInfo().getWorkflowType());
+        // Plug in your logging here...
+        System.out.println("Activity Type: " Activity.getExecutionContext().getInfo().getActivityType())
+        System.out.println("Called from workflow: " + Activity.getExecutionContext().getInfo().getWorkflowType());
 
         try {
             URL website = new URL(url);
