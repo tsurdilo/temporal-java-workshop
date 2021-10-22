@@ -19,7 +19,7 @@
 * [Section 6 - Child Workflows](src/main/java/io/workshop/README.md#section-5)
 * [Section 7 - Testing](src/main/java/io/workshop/README.md#section-6)
 
-### 2. More advanced stuff (planned for next Workshop session)
+### 2. Things planned for future Workshops
 
 * Long-running activities - heart-beat
 * Manual completion (activities)
@@ -28,6 +28,7 @@
 * Data Converters
 * Interceptors (workflow/activity)
 * SDK Metrics / Server Metrics
+* Framework integration (SpringBoot, Quarkus, ...)
 * and more :) 
 
 
