@@ -2,6 +2,7 @@ package io.workshop.s1;
 
 import io.temporal.client.WorkflowOptions;
 import io.temporal.testing.TestWorkflowRule;
+import io.temporal.testing.WorkflowReplayer;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class GreetingWorkflowTest {
     private Customer testCustomer = new Customer("Elisabeth", "Ms.", "English Spansh", 22);
 
     @Test
-    public void testActivity() {
+    public void testWorkflow() {
 
         // Get a workflow stub using the same task queue the worker uses.
         GreetingWorkflow workflow =
@@ -32,5 +33,13 @@ public class GreetingWorkflowTest {
         assertEquals("Hello " + testCustomer.getName(), greeting);
 
         testWorkflowRule.getTestEnvironment().shutdown();
+
+        // Note to self, ADD A SUPER LONG SLEEP to show time advance and run again
+    }
+
+    @Test
+    public void replayFromHistory() throws Exception {
+        WorkflowReplayer.replayWorkflowExecutionFromResource(
+                "s1history.json", GreetingWorkflowImpl.class);
     }
 }

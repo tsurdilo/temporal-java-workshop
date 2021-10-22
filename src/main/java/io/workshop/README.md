@@ -1,24 +1,14 @@
 # Java SDK Workshop - Chapter 1 -Getting Started
 
-* [Section 1](#Section-1)
-* [Section 2](#Section-2)
-* [Not covered in this chapter (Will be in next workshop)](#Not-Covered)
+* [Section 1 - Setting up](#Section-1)
+* [Section 2 - Workflows](#Section-2)
+* [Section 3 - Workers](#Section-3)  
+* [Section 4 - Activities](#Section-4)
+* [Section 5 - Child Workflows](#Section-5)
+* [Section 6 - Testing](#Section-6)
 
 # Section 1
-
-## In this chapter we will learn about:
-
-* [Workshop / Dev env Prerequisites](#Prerequisites)
-* [Temporal Java SDK](#Temporal-Java-SDK)
-* [Using SDK in your applications](#Using-SDK)
-* [Temporal Server](#Temporal-Server)
-* [tctl (CLI)](#tctl)
-* [Workflows, getting started](#Getting-Started-With-Workflows)
-* [Workers](#Workers)
-* [Interacting with workflows - Client API](#Interacting-with-workflows)
-* [Search Attributes](#Search-Attributes)
-
-### Prerequisites
+## Setting up 
 
 * Java (version 8 or higher)
 * Maven / Gradle 
@@ -29,7 +19,7 @@
     * [Video](https://www.youtube.com/watch?v=f6N3ZcWHygU)
 * IDE (IntelliJ, VSCode, Eclipse, ...)
 
-### Temporal Java SDK
+## Temporal Java SDK
 
 * Provided APIs:
     * Client
@@ -45,7 +35,7 @@
     * Workflow
     * Testing   
   
-### Using SDK
+## Using SDK
 
 * Main Dependency
 
@@ -98,13 +88,13 @@ Gradle:
 
 * [Simple Maven Archetype](https://github.com/tsurdilo/temporal-simple-archetype)
 
-### Temporal Server
+## Temporal Server
 
 * Server Components
-![Temporal Server](../../../../../../media/c1/c1-server.png)
+![Temporal Server](../../../../../media/c1/c1-server.png)
 
 * From dev perspective
-![Temporal Server](../../../../../../media/c1/c1-server-developer-pov.png)
+![Temporal Server](../../../../../media/c1/c1-server-developer-pov.png)
 
 
 * [Github Repo](https://github.com/temporalio/temporal)
@@ -132,7 +122,7 @@ docker system prune -a
 docker volume prune
 ```
 
-### tctl
+## tctl
 
 * [Documentation](https://docs.temporal.io/docs/system-tools/tctl/)
 
@@ -156,12 +146,14 @@ tctl -version
 tctl cluster health
 ```
 
-### Getting Started With Workflows
+# Section 2
+
+## Workflows
 
 * Programming-language model
     * [Defining Workflows Blog](https://docs.temporal.io/blog/defining-workflows)
 
-* [GreetingStarter Workflow](GreetingStarter.java)
+* [GreetingStarter Workflow](s1/GreetingStarters)
     * Workflow Interface - @WorkflowInterface
     * Workflow Type
     * Workflow method -  @WorkflowMethod
@@ -247,18 +239,11 @@ io.workshop.intro.GetFinalCount
     * Min: 1 day
     * Max: 30 days
     * Default: 2 days
+    
 
-### Workers
+## Interacting with workflows
 
-* WorkerFactory
-* WorkerOptions
-* Worker
-    * TaskQueue
-    * Register Workflow impls
-
-### Interacting with workflows
-
-![Client API](../../../../../../media/c1/c1-clientapi.png)
+![Client API](../../../../../media/c1/c1-clientapi.png)
 
 * gRPC communication to Temporal server
 * Workflow client stub
@@ -318,7 +303,7 @@ io.workshop.intro.GetFinalCount
 * Querying workflows
 
 <p align="center">
-<img src="../../../../../../media/c1/c1-clientapi.png" width="450"/>
+<img src="../../../../../media/c1/c1-clientapi.png" width="450"/>
 </p>
 
 * In Web UI
@@ -328,7 +313,7 @@ io.workshop.intro.GetFinalCount
     * Discuss long-running workflow
 * Discuss polyglot aspect of Temporal (in terms of client)
 
-### Search Attributes
+## Search Attributes
 * Custom key-value pairs
 * Can be added to workflow metadata
 * Integrated with Elasticsearch
@@ -343,17 +328,20 @@ tctl admin cluster add-search-attributes --name CustomerLanguages --type String
 tctl admin cluster add-search-attributes --name CustomerAge --type Int
 ```
 
+# Section 3
 
-# Section 2
+## Workers
 
-## In this chapter we will learn about:
+* WorkerFactory
+* WorkerOptions
+* Worker
+    * TaskQueue
+    * Register Workflow impls
 
-* [Activities](#Activities)
-* [Child Workflows](#Child-Workflows)
-* [Testing Workflows and Activities](#Testing)
-    * long sleep
 
-### Activities
+# Section 4
+
+## Activities
 
 * Yay, we can finally use Thread.sleep :) 
 
@@ -368,37 +356,38 @@ tctl admin cluster add-search-attributes --name CustomerAge --type Int
         * Activities must be thread safe!
    * Logic can be changed without breaking determinism
    * Inputs and results recorded in event history
+   * Can heartbeat
+   * Can be manually completed
 
 * @ActivityInterface
 * @ActivityMethod (not really needed, type defaults to method name)
 
 * Limitations
+ * Similar to workflows (data input / output size)
 
-### Child Workflows
+# Section 5
 
-#### Overview
+## Child Workflows
+
 * Invoking sync/async
 
-### Testing
+# Section 6
+
+## Testing
 
 * Workflows - TestWorkflowEnvironment
 * Activities - TestActivityEnvironment
+
+* Does not need Temporal Server to be running (can test offline)
 
 * Test workflow with real activities
 * Mock activities
 * Time advance
 * Workflow replay from history
+* Json event hitory via tctl:
 
-#### Overview
-* Invoking sync/async
+```
+tctl wf show -w <WF Type> -r <WF Run Id> --output_filename myfile.json
+```
 
-# Not Covered
-
-* Long-running activities - heart-beat
-* Manual completion (activities)
-* Workflow versioning
-* Dynamic Workflows/Activities
-* Data Converters
-* Interceptors (workflow/activity)
-* SDK Metrics / Server Metrics
-* and more :) 
+* Debugging - set env var "TEMPORAL_DEBUG" to true

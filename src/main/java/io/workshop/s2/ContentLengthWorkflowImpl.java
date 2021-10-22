@@ -41,13 +41,13 @@ public class ContentLengthWorkflowImpl implements ContentLengthWorkflow {
 
         //return invokeParallelWaitForAll();
 
-        // return invokeParallelWaitForFirst();
+        //return invokeParallelWaitForFirst();
 
-        // return invokeParallelBranches();
+        //return invokeParallelBranches();
 
         //return invokeWithRetries();
 
-        // return invokeNoRetriesHandleError();
+        //return invokeNoRetriesHandleError();
     }
 
     private ContentLengthInfo invokeAndWaitForResult() {
