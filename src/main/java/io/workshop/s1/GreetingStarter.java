@@ -164,8 +164,6 @@ public class GreetingStarter {
                         //.setWorkflowExecutionTimeout(Duration.ofSeconds(20))
                         //.setWorkflowRunTimeout(Duration.ofSeconds(20))
                         .setTaskQueue(taskQueue)
-                        // 1.1 cron
-                        //.setCronSchedule("@every 10s")
                         .build()
         );
 
@@ -277,6 +275,14 @@ public class GreetingStarter {
 
         // start async, not blocking
         WorkflowClient.start(workflow::greet, customer1);
+
+        /**
+         * Note to self:
+         * Explain how executions work with cron (start, next execution, etc)
+         * Cron is limited in functionality, but you can define your own
+         * 1. Periodic execution
+         * 2. Updatable timer
+         */
     }
 
     public static void startAndTerminate() {

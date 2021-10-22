@@ -2,6 +2,7 @@
 
 * [Section 1](#Section-1)
 * [Section 2](#Section-2)
+* [Not covered in this chapter (Will be in next workshop)](#Not-Covered)
 
 # Section 1
 
@@ -180,6 +181,21 @@ tctl cluster health
     
 * Workflow "magic" - Durability (ability to resume after failure)
   * [Durability demo (PHP -> Java)](https://community.temporal.io/t/temporal-workflow-resumability/2838/3)
+    * To run demo:
+```
+cd notifyuserphp
+./rr serve
+php app.php notification
+
+# stop worker (rr serve window) like in the middle of the 10 customer iterations
+#continue workflow exection on the Java side by running
+
+io.workshop.intro.NotifyUserWorker
+
+# check the final state of completed workflow with
+
+io.workshop.intro.GetFinalCount
+``` 
   * How? 
     * Temporal uses [Event Sourcing pattern](https://martinfowler.com/eaaDev/EventSourcing.html)
         * All changes during workflow execution are recorded as events
@@ -249,18 +265,29 @@ tctl cluster health
 * WorkflowStub - client side stub to a single workflow instance
 * Different ways of starting workflow executions
 * Core concepts: namespace, task queue, poller/worker
+* Namespace:
+ * Unit of isolation
+* Task Queue - "Endpoint" 
+* Pollers/Workers - Processes (running on your machines) that listen to task queues
+
 * Polyglot
+   * [Demo 1](https://github.com/temporalio/temporal-polyglot)
+   * [Demo 2](https://github.com/temporalio/temporal-pendulum)
+   * [Demo 3](https://github.com/tsurdilo/temporal-polyglot-snake)
 
 * WorkflowServiceStubs
 * WorkflowService
 * Workflow stubs
-* [Workflow Options](https://github.com/tsurdilo/temporal-sdk-options)
+* [Workflow Options](https://github.com/tsurdilo/temporal-sdk-options/tree/main/java#workflowoptions)
   * Workflow Id
   * Task Queue
 * Starting workflows
     * typed
         * sync / async
     * cron
+      * limited, but can write own:
+        * [Periodic execution](https://github.com/temporalio/samples-java/tree/master/src/main/java/io/temporal/samples/updatabletimer)
+        * [Updatable timer](https://github.com/temporalio/samples-java/blob/master/src/main/java/io/temporal/samples/hello/HelloPeriodic.java)
     * untyped
     * async
         * Workflow.execute
@@ -322,16 +349,30 @@ tctl admin cluster add-search-attributes --name CustomerAge --type Int
 ## In this chapter we will learn about:
 
 * [Activities](#Activities)
-    * retried by default
-    *
 * [Child Workflows](#Child-Workflows)
 * [Testing Workflows and Activities](#Testing)
     * long sleep
 
 ### Activities
 
-#### Overview
-* Invoking sync/async
+* Yay, we can finally use Thread.sleep :) 
+
+* "Workhorses"
+   * Orchestrated by workflows
+   * Allowed to contain any code (integration with libraries, services, io, db, etc etc)
+   * [Activity Options](https://github.com/tsurdilo/temporal-sdk-options/tree/main/java#activityoptions)
+   * Automatic retries (can be configured)
+   * [Activity Timeouts Explained](https://www.youtube.com/watch?v=JK7WLK3ZSu8)
+   * Can be executed async and  parallel
+   * Must be registered with worker (activity instance)
+        * Activities must be thread safe!
+   * Logic can be changed without breaking determinism
+   * Inputs and results recorded in event history
+
+* @ActivityInterface
+* @ActivityMethod (not really needed, type defaults to method name)
+
+* Limitations
 
 ### Child Workflows
 
@@ -340,5 +381,24 @@ tctl admin cluster add-search-attributes --name CustomerAge --type Int
 
 ### Testing
 
+* Workflows - TestWorkflowEnvironment
+* Activities - TestActivityEnvironment
+
+* Test workflow with real activities
+* Mock activities
+* Time advance
+* Workflow replay from history
+
 #### Overview
 * Invoking sync/async
+
+# Not Covered
+
+* Long-running activities - heart-beat
+* Manual completion (activities)
+* Workflow versioning
+* Dynamic Workflows/Activities
+* Data Converters
+* Interceptors (workflow/activity)
+* SDK Metrics / Server Metrics
+* and more :) 
