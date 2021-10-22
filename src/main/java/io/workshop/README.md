@@ -194,8 +194,8 @@ io.workshop.intro.GetFinalCount
         * Events can be replayed to restore state after failure
         * Temporal optimizations (caching)
   * "Magic" comes at a price:
-        * workflows must be deterministic
-        * workflows api has implementation constraints
+    * workflows must be deterministic
+    * workflows api has implementation constraints
     
 * [Implementation Constraints](https://docs.temporal.io/docs/java/workflows#workflow-implementation-constraints)
     * Dont' use mutable global state
