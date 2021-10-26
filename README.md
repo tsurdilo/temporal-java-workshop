@@ -5,8 +5,8 @@
 * [Website](https://temporal.io/)
 * [Community Forum](https://community.temporal.io/)
 * [Slack](https://temporal.io/slack)
-* [YouTube]()
-* [Meetups](https://lu.ma/temporal)
+* [YouTube](https://temporal.io/youtube)
+* [Meetups](https://temporal.io/meetup)
 
 ## Chapters
 
