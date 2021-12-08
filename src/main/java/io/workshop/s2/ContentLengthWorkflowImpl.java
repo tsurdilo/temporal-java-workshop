@@ -4,10 +4,7 @@ import io.temporal.activity.Activity;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
-import io.temporal.workflow.Async;
-import io.temporal.workflow.Promise;
-import io.temporal.workflow.Saga;
-import io.temporal.workflow.Workflow;
+import io.temporal.workflow.*;
 import org.slf4j.Logger;
 
 import java.time.Duration;
@@ -22,15 +19,8 @@ public class ContentLengthWorkflowImpl implements ContentLengthWorkflow {
     private final ContentLengthActivity activities =
             Workflow.newActivityStub(
                     ContentLengthActivity.class,
-                    ActivityOptions.newBuilder()
-                            // Activities can be executed on different task queues
-                            // task queue if not specified defaults to workflow task queue
-                            //.setTaskQueue("someOtherTaskQueue")
+                    ActivityOptions.newBuilder().setStartToCloseTimeout(Duration.ofSeconds(2)).build());
 
-                            // Maximum time of a single Activity execution attempt.
-                            .setStartToCloseTimeout(Duration.ofSeconds(5))
-
-                            .build());
 
     @Override
     public ContentLengthInfo execute() {

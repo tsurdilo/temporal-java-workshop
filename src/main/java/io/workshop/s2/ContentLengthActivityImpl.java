@@ -14,6 +14,7 @@ public class ContentLengthActivityImpl implements ContentLengthActivity {
 
         // Activity execution context is your friend :)
         // Plug in your logging here...
+        Activity.getExecutionContext().getTaskToken();
         System.out.println("Activity Type: " +  Activity.getExecutionContext().getInfo().getActivityType());
         System.out.println("Called from workflow: " + Activity.getExecutionContext().getInfo().getWorkflowType());
 
