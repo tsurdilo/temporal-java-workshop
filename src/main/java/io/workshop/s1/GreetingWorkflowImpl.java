@@ -7,11 +7,11 @@ import java.time.Duration;
 
 /**
  * Simple Greeting Workflow Impl.
- *
+ * <p>
  * Note to self:
- *  Workflows can be multi-threaded - "cooperative multithreading"
- *  Threads are executed on-by-one and are preempted when on a call to Temporal SDK function,
- *  for example Workflow.sleep, Future.get, Workflow.await, ....
+ * Workflows can be multi-threaded - "cooperative multithreading"
+ * Threads are executed on-by-one and are preempted when on a call to Temporal SDK function,
+ * for example Workflow.sleep, Future.get, Workflow.await, ....
  */
 public class GreetingWorkflowImpl implements GreetingWorkflow {
 
@@ -26,20 +26,22 @@ public class GreetingWorkflowImpl implements GreetingWorkflow {
         logger.info("My task queue: " + Workflow.getInfo().getTaskQueue());
 
 //        if(customer != null) {
-            this.customer = customer;
+        this.customer = customer;
 //        }
 
         Workflow.sleep(Duration.ofSeconds(5));
 
         return "Hello " + this.customer.getName();
+
     }
 
     /**
      * Note: Signals are invoked in own thread
      * If a signal method blocks execution, it does NOT stop other signals to be delivered
-     *
+     * <p>
      * Also :) You can add workflow methods inside signal methods (like call activities)...
      * but its not recommended
+     *
      * @param customer
      */
     @Override

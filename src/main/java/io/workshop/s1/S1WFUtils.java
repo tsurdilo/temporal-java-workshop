@@ -10,6 +10,8 @@ import io.temporal.api.workflowservice.v1.*;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowStub;
+import io.temporal.common.RetryOptions;
+import io.temporal.internal.common.HistoryProtoTextUtils;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
@@ -29,6 +31,9 @@ public class S1WFUtils {
 
     // tast queue (server "end-point") that worker(s) listen to
     public static final String taskQueue = "c1TaskQueue";
+
+    public static final RetryOptions NO_RETRY = RetryOptions.newBuilder().setMaximumAttempts(1).build();
+
 
     /**
      * Prints workflow executions, given a provided query. Note this requires ES.
@@ -60,14 +65,17 @@ public class S1WFUtils {
             request = ListWorkflowExecutionsRequest.newBuilder()
                     .setNamespace(client.getOptions().getNamespace())
                     .setQuery("ExecutionStatus='Failed'")
+                    .setPageSize(1000)
                     .build();
         } else {
             request = ListWorkflowExecutionsRequest.newBuilder()
                     .setNamespace(client.getOptions().getNamespace())
                     .setQuery("ExecutionStatus='Failed'")
                     .setNextPageToken(token)
+                    .setPageSize(1000)
                     .build();
         }
+        System.out.println("************** size: " + request.getPageSize());
         ListWorkflowExecutionsResponse response =
                 service.blockingStub().listWorkflowExecutions(request);
         for(WorkflowExecutionInfo info : response.getExecutionsList()) {
@@ -75,6 +83,7 @@ public class S1WFUtils {
             // here you can get the failure and compare/check against what you want/need
             System.out.println("wfid: " + info.getExecution().getWorkflowId());
             System.out.println("failure: " + lastHistoryEvent.getWorkflowExecutionFailedEventAttributesOrBuilder().getFailure());
+            System.out.println("history: " + lastHistoryEvent);
         }
 
         if(response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
@@ -100,7 +109,7 @@ public class S1WFUtils {
                             .setNextPageToken(token)
                             .build();
         }
-
+        System.out.println("************** size: " + request.getMaximumPageSize());
         GetWorkflowExecutionHistoryResponse response =
                 service.blockingStub().getWorkflowExecutionHistory(request);
         lastHistoryEvent = response.getHistory().getEventsList().get( response.getHistory().getEventsList().size() - 1);

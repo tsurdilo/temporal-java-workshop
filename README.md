@@ -10,16 +10,22 @@
 
 ## Chapters
 
-### 1. [Getting Started](src/main/java/io/workshop/README.md)
+### 1. [Getting Started](src/main/java/io/workshop/CHAPTER1.md)
 
-* [Section 1 - Set up](src/main/java/io/workshop/README.md#section-1)
-* [Section 2 - Workflows](src/main/java/io/workshop/README.md#section-2)
-* [Section 4 - Workers](src/main/java/io/workshop/README.md#section-3)
-* [Section 5 - Activities ](src/main/java/io/workshop/README.md#section-4)
-* [Section 6 - Child Workflows](src/main/java/io/workshop/README.md#section-5)
-* [Section 7 - Testing](src/main/java/io/workshop/README.md#section-6)
+* [Section 1 - Set up](src/main/java/io/workshop/CHAPTER1.md#section-1)
+* [Section 2 - Workflows](src/main/java/io/workshop/CHAPTER1.md#section-2)
+* [Section 3 - Workers](src/main/java/io/workshop/CHAPTER1.md#section-3)
+* [Section 4 - Activities ](src/main/java/io/workshop/CHAPTER1.md#section-4)
+* [Section 5 - Child Workflows](src/main/java/io/workshop/CHAPTER1.md#section-5)
+* [Section 6 - Testing](src/main/java/io/workshop/CHAPTER1.md#section-6)
 
-### 2. Things planned for future Workshops
+## Chapters
+
+### 2. [Let's Keep Going...](src/main/java/io/workshop/CHAPTER2.md)
+
+* [Section 1 - Versioning](src/main/java/io/workshop/CHAPTER2.md#section-1)
+
+## 3. Things planned for future Workshops
 
 * Long-running activities - heart-beat
 * Manual completion (activities)

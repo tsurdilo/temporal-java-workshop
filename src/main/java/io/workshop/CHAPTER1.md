@@ -1,4 +1,4 @@
-# Java SDK Workshop - Chapter 1 -Getting Started
+# Java SDK Workshop - Chapter 1 - Getting Started
 
 * [Section 1 - Setting up](#Section-1)
 * [Section 2 - Workflows](#Section-2)
@@ -390,10 +390,11 @@ tctl admin cluster add-search-attributes --name CustomerAge --type Int
 * Mock activities
 * Time advance
 * Workflow replay from history
-* Json event hitory via tctl:
+* Json event history via tctl:
 
 ```
 tctl wf show -w <WF Type> -r <WF Run Id> --output_filename myfile.json
 ```
 
 * Debugging - set env var "TEMPORAL_DEBUG" to true
+

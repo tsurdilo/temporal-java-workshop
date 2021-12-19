@@ -4,7 +4,9 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
+import io.temporal.failure.TimeoutFailure;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -66,15 +68,22 @@ public class GreetingStarter {
                 GreetingWorkflow.class,
                 WorkflowOptions.newBuilder()
                         .setWorkflowId(workflowId)
+                        .setWorkflowRunTimeout(Duration.ofSeconds(1))
                         //.setWorkflowExecutionTimeout(Duration.ofSeconds(20))
                         //.setWorkflowRunTimeout(Duration.ofSeconds(20))
                         .setTaskQueue(taskQueue)
                         .build()
         );
 
-        String greeting = workflow.greet(customer1);
-        printWorkflowStatus();
-        System.out.println("Greeting: " + greeting);
+        try {
+            String greeting = workflow.greet(customer1);
+            printWorkflowStatus();
+            System.out.println("Greeting: " + greeting);
+        } catch (WorkflowFailedException e) {
+            if(e.getCause() instanceof TimeoutFailure) {
+                System.out.println(e.getCause().getMessage());
+            }
+        }
     }
 
     private static void startAsyncExpectWaitForResult() throws ExecutionException, InterruptedException {

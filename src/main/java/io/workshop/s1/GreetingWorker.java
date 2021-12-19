@@ -1,15 +1,18 @@
 package io.workshop.s1;
 
+import io.temporal.activity.ActivityOptions;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 import io.temporal.worker.WorkflowImplementationOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.workshop.s1.S1WFUtils.client;
 import static io.workshop.s1.S1WFUtils.taskQueue;
 
 public class GreetingWorker {
     public static void main(String[] args) {
-
         WorkflowImplementationOptions workflowImplementationOptions =
                 WorkflowImplementationOptions.newBuilder()
                         .setFailWorkflowExceptionTypes(NullPointerException.class)
