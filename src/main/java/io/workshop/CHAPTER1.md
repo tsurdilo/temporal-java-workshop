@@ -153,7 +153,7 @@ tctl cluster health
 * Programming-language model
     * [Defining Workflows Blog](https://docs.temporal.io/blog/defining-workflows)
 
-* [GreetingStarter Workflow](s1/GreetingStarters)
+* [GreetingStarter Workflow](c1s1/GreetingStarters)
     * Workflow Interface - @WorkflowInterface
     * Workflow Type
     * Workflow method -  @WorkflowMethod
