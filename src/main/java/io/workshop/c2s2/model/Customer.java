@@ -1,4 +1,4 @@
-package io.workshop.c2s1.model;
+package io.workshop.c2s2.model;
 
 import java.time.Duration;
 

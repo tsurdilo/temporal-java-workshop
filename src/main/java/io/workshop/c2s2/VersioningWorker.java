@@ -1,4 +1,4 @@
-package io.workshop.c2s1;
+package io.workshop.c2s2;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;

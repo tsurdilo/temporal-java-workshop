@@ -20,7 +20,7 @@ public class ParentStarter {
                         .build()
         );
 
-        workflow.executeParent();
+        workflow.executeParent(0);
 
         System.exit(0);
     }

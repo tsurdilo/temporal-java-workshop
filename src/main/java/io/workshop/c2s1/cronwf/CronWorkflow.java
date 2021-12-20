@@ -1,10 +1,10 @@
-package io.workshop.c1s3;
+package io.workshop.c2s1.cronwf;
 
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
 
 @WorkflowInterface
-public interface ParentWorkflow {
+public interface CronWorkflow {
     @WorkflowMethod
-    void executeParent(int count);
+    public void exec();
 }

@@ -10,13 +10,13 @@ public class ChildWorkflowImpl implements ChildWorkflow {
     private Logger logger = Workflow.getLogger(this.getClass().getName());
 
     @Override
-    public String executeChild() {
+    public String executeChild(int count) {
 
         // Workflow.getInfo is your friend :)
         logger.info("Child id: " + Workflow.getInfo().getWorkflowId());
         logger.info("Parent id: " + Workflow.getInfo().getParentWorkflowId());
 
-        Workflow.sleep(Duration.ofSeconds(3));
-        return "Child workflow done";
+        Workflow.sleep(Duration.ofMinutes(5));
+        return "Child workflow done: " + count;
     }
 }

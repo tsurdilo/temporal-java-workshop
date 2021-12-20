@@ -1,10 +1,10 @@
-package io.workshop.c1s3;
+package io.workshop.c2s1.actwithretries;
 
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
 
 @WorkflowInterface
-public interface ParentWorkflow {
+public interface MyWorkflow {
     @WorkflowMethod
-    void executeParent(int count);
+    void exec();
 }

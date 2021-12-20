@@ -1,10 +1,10 @@
-package io.workshop.c2s1;
+package io.workshop.c2s2;
 
 
 import io.temporal.activity.ActivityOptions;
 import io.temporal.workflow.Workflow;
-import io.workshop.c2s1.model.Account;
-import io.workshop.c2s1.model.Customer;
+import io.workshop.c2s2.model.Account;
+import io.workshop.c2s2.model.Customer;
 
 import java.time.Duration;
 

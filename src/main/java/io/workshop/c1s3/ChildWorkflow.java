@@ -6,6 +6,6 @@ import io.temporal.workflow.WorkflowMethod;
 @WorkflowInterface
 public interface ChildWorkflow {
     @WorkflowMethod
-    String executeChild();
+    String executeChild(int count);
 
 }

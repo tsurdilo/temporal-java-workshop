@@ -10,6 +10,25 @@
 
 ## Client APIs Continued
 
+* List Opened Workflows - does NOT require Elasticsearch
+    * tctl wf list --open
+* List Closed Workflows
+    * tctl wf list --status completed
+* Describe wf execution
+    * tctl wf desc -w <wfid> -r <wfrunid>
+* Print wf stack trace
+    * tctl wf stack -w <wfid> -r <wfrunid>
+* Get workflow cron schedule
+* Get Activities with retry count over X
+* List Namespaces
+  * tctl namespace list
+* Create Namespace
+  * tctl --ns mynamespace n re
+* Check cluster (FrontEnd Service health)
+  * tctl cluster health
+* Describe task queue
+  * tctl tq desc -tq <task_queue_name>
+
 # Section 2
 
 ## Versioning 

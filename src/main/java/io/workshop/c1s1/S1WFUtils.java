@@ -70,7 +70,6 @@ public class S1WFUtils {
                     .setPageSize(1000)
                     .build();
         }
-        System.out.println("************** size: " + request.getPageSize());
         ListWorkflowExecutionsResponse response =
                 service.blockingStub().listWorkflowExecutions(request);
         for(WorkflowExecutionInfo info : response.getExecutionsList()) {
@@ -104,7 +103,6 @@ public class S1WFUtils {
                             .setNextPageToken(token)
                             .build();
         }
-        System.out.println("************** size: " + request.getMaximumPageSize());
         GetWorkflowExecutionHistoryResponse response =
                 service.blockingStub().getWorkflowExecutionHistory(request);
         lastHistoryEvent = response.getHistory().getEventsList().get( response.getHistory().getEventsList().size() - 1);

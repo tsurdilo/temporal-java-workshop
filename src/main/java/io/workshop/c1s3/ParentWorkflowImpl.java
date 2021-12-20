@@ -9,18 +9,18 @@ import io.temporal.workflow.Workflow;
 public class ParentWorkflowImpl implements ParentWorkflow {
 
     @Override
-    public void executeParent() {
-        //invokeChildWaitForResults();
+    public void executeParent(int count) {
+        invokeChildWaitForResults(count);
 
-        invokeChildDontWaitForResults();
+        //invokeChildDontWaitForResults(count);
 
         // Note: child workflows can be invoked in parallel as well, see Activity demos in s2 package
     }
 
-    private void invokeChildWaitForResults() {
+    private void invokeChildWaitForResults(int count) {
         ChildWorkflowOptions childWorkflowOptions =
                 ChildWorkflowOptions.newBuilder()
-                        .setWorkflowId("childWorkflow")
+                        .setWorkflowId("childWorkflow-" + count)
                         // Child workflow can be invoked on a different task queue
                         // by default its the parent task queue
                         //.setTaskQueue("someOtherTaskQueue")
@@ -40,13 +40,13 @@ public class ParentWorkflowImpl implements ParentWorkflow {
         // Get the child workflow stub
         ChildWorkflow child = Workflow.newChildWorkflowStub(ChildWorkflow.class, childWorkflowOptions);
         // invoke child workflow and wait for it to complete
-        child.executeChild();
+        child.executeChild(count);
     }
 
-    private void invokeChildDontWaitForResults() {
+    private void invokeChildDontWaitForResults(int count) {
         ChildWorkflowOptions childWorkflowOptions =
                 ChildWorkflowOptions.newBuilder()
-                        .setWorkflowId("childWorkflow")
+                        .setWorkflowId("childWorkflow-" + count)
                         // Child workflow can be invoked on a different task queue
                         // by default its the parent task queue
                         //.setTaskQueue("someOtherTaskQueue")
@@ -61,7 +61,7 @@ public class ParentWorkflowImpl implements ParentWorkflow {
 
 
         // Start the child workflow async..we dont expect result
-        Async.procedure(child::executeChild);
+        Async.procedure(child::executeChild, count);
 
         // Get the child workflow execution promise
         Promise<WorkflowExecution> childExecution = Workflow.getWorkflowExecution(child);
