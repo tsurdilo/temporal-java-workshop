@@ -1,8 +1,8 @@
-package io.workshop.c2s2;
+package io.workshop.c2s3;
 
 import io.temporal.activity.ActivityInterface;
-import io.workshop.c2s2.model.Account;
-import io.workshop.c2s2.model.Customer;
+import io.workshop.c2s3.model.Account;
+import io.workshop.c2s3.model.Customer;
 
 @ActivityInterface
 public interface CustomerActivities {

@@ -1,10 +1,10 @@
-package io.workshop.c2s2;
+package io.workshop.c2s3;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
-import io.workshop.c2s2.model.Account;
-import io.workshop.c2s2.model.Customer;
+import io.workshop.c2s3.model.Account;
+import io.workshop.c2s3.model.Customer;
 
 import java.time.Duration;
 
@@ -14,7 +14,7 @@ public class VersioningStarter {
 
     public static void main(String[] args) {
         Customer customer = new Customer("c1", "John", "john@john.com", "new",
-                Duration.ofMinutes(2));
+                Duration.ofMinutes(1));
         WorkflowOptions newCustomerWorkflowOptions =
                 WorkflowOptions.newBuilder()
                         .setWorkflowId(customer.getAccountNum())

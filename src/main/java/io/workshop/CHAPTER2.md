@@ -1,10 +1,11 @@
 # Java SDK Workshop - Chapter 2 - Let's keep going...
 
 * [Section 1 - Client APIs continued](#Section-1)
-* [Section 2 - Versioning](#Section-2)
-* [Section 3 - Error Handling](#Section-3)
-* [Section 4 - Cancellation](#Section-4)
-* [Section 4 - Compensation](#Section-5)
+* [Section 1 - Sleep Duration](#Section-2)
+* [Section 2 - Versioning](#Section-3)
+* [Section 3 - Error Handling](#Section-4)
+* [Section 4 - Cancellation](#Section-5)
+* [Section 4 - Compensation](#Section-6)
 
 # Section 1
 
@@ -31,16 +32,65 @@
 
 # Section 2
 
-## Versioning 
+## Sleep Duration
+
+<p align="center">
+<img src="../../../../../media/c2/workflow-sleep-website.png" width="450"/>
+</p>
+
+In this section we are going to take a look at "simple" Workflow.sleep
+and will learn how to get the most out of it in cases of failures, or workers being down
 
 # Section 3
 
-## Error Handling
+## Versioning 
+
+1. Show how we can fix activity code to unblock workflow execution
+2. Show version sample
+
+** Limitations
+  * https://github.com/temporalio/sdk-java/issues/587 - TemporalChangeVersion search attribute not updated in Java SDK
+  * To Show search attributes: tctl cluster get-search-attributes
+  * tctl workflow count --query='TemporalChangeVersion="<change_id>-<version>" AND ExecutionStatus=1'
+  * tctl workflow list --query='TemporalChangeVersion="<change_id>-<version>" AND ExecutionStatus=1'
 
 # Section 4
 
-## Cancellation
+## Error Handling
+
+Any exception that doesn’t extend TemporalFailure is converted to ApplicationFailure when thrown from a workflow or an activity.
+The ApplicationFailure extends TemporalFailure. So it is passed to a caller without any conversion.
+An activity invocation always throws ActivityFailure with an original failure as a cause.
+A child workfow invocation always throws ChildWorkflowFailure with an original failure as a cause.
+A synchronous workflow invocation always returns WorkflowException which will contain the workflow failure as a cause.
+
+
+Workflow error handling
+By default, workflows by default don’t have retry options and are not retried when failed or timed out.
+
+Case 1 : thrown Exception extends Temporal Failure
+Expected Result : Workflow fails and closes with no retries.
+
+Workflow fails and is retried (by executing from the beginning) only if retry options are specified.
+
+Case 2 : thrown Exception does not extend TemporalFailure and is specified in WorkflowImplementationOptions.setFailWorkflowExceptionTypes
+Expected Result : Workflow retries from scratch, ignoring EventHistory and re-executing any activities as well as the special Workflow.random*() methods.
+
+The same as Case 1. Workflow fails and is retried (by executing from the beginning) only if retry options are specified.
+
+Q : In the event of a full retry, is the pervious EventHistory retained anywhere?
+
+The workflow retry is modeled as a new workflow run. So it gets a new runId. The previous run data including its event history is still available up to the retention period.
+
+Case 3 : thrown Exception does not extend TemporalFailure and is not specified in WorkflowImplementationOptions.setFailWorkflowExceptionTypes (like an NPE)
+Expected Result : Workflow replays indefinitely or until hitting a timeout, using the Event History, waiting for a fix.
+
+
 
 # Section 5
+
+## Cancellation
+
+# Section 6
 
 ## Compensation 

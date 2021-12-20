@@ -24,6 +24,7 @@ public class GreetingWorkflowImpl implements GreetingWorkflow {
         logger.info("My Id: " + Workflow.getInfo().getWorkflowId());
         logger.info("My runId" + Workflow.getInfo().getRunId());
         logger.info("My task queue: " + Workflow.getInfo().getTaskQueue());
+        logger.info("Current time: " + Workflow.currentTimeMillis());
 
 //        if(customer != null) {
         this.customer = customer;
