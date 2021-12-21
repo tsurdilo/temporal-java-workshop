@@ -7,6 +7,10 @@
 * [Section 5 - Child Workflows](#Section-5)
 * [Section 6 - Testing](#Section-6)
 
+<p align="center">
+ <a href="https://www.youtube.com/watch?v=VoSiIwkvuX0&t=6504s"><img src="../../../../../media/workshop-1-video.png" width="450"/></a>
+</p>
+
 # Section 1
 ## Setting up 
 
