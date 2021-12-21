@@ -48,7 +48,7 @@ and will learn how to get the most out of it in cases of failures, or workers be
 1. Show how we can fix activity code to unblock workflow execution
 2. Show version sample
 
-** Limitations
+** Current limitations for Java SDK:
   * https://github.com/temporalio/sdk-java/issues/587 - TemporalChangeVersion search attribute not updated in Java SDK
   * To Show search attributes: tctl cluster get-search-attributes
   * tctl workflow count --query='TemporalChangeVersion="<change_id>-<version>" AND ExecutionStatus=1'
@@ -58,8 +58,25 @@ and will learn how to get the most out of it in cases of failures, or workers be
 
 ## Error Handling
 
-Any exception that doesn’t extend TemporalFailure is converted to ApplicationFailure when thrown from a workflow or an activity.
-The ApplicationFailure extends TemporalFailure. So it is passed to a caller without any conversion.
+* Handling workflow timeout on client
+  *
+
+
+By default:
+* Workflows don't have retry options - not retried when failed or timed out
+* Workflow is retried only if you specify its retry options
+
+
+* Workflow code throws exception that extends TemporalFailure
+
+
+* Any exception that doesn’t extend TemporalFailure is converted to ApplicationFailure when thrown from a workflow or an activity.
+* Calls to activities always throw ActivityFailure with an exception that caused the failure as a cause. 
+So a NullPointerException thrown from an activity is going to be delivered to the workflow 
+(after exhausting all retries according to the retry options) as an 
+ActivityFailure that has an ApplicationFailure with a type equal to `java.lang.NullPointerException" as a cause.
+
+
 An activity invocation always throws ActivityFailure with an original failure as a cause.
 A child workfow invocation always throws ChildWorkflowFailure with an original failure as a cause.
 A synchronous workflow invocation always returns WorkflowException which will contain the workflow failure as a cause.
