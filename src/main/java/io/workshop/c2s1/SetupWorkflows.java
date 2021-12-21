@@ -1,13 +1,5 @@
 package io.workshop.c2s1;
 
-import com.google.protobuf.ByteString;
-import io.temporal.api.common.v1.WorkflowExecution;
-import io.temporal.api.history.v1.HistoryEvent;
-import io.temporal.api.workflow.v1.WorkflowExecutionInfo;
-import io.temporal.api.workflowservice.v1.GetWorkflowExecutionHistoryRequest;
-import io.temporal.api.workflowservice.v1.GetWorkflowExecutionHistoryResponse;
-import io.temporal.api.workflowservice.v1.ListWorkflowExecutionsRequest;
-import io.temporal.api.workflowservice.v1.ListWorkflowExecutionsResponse;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
@@ -46,11 +38,11 @@ public class SetupWorkflows {
     // Set up for c2s1 (client apis)
     public static void main(String[] args) {
         setupWorker();
-        //setupFailedWorkflows();
-        //setupCompletedWorkflows();
-        //setupRunningWorkflows();
-        //setupCronWorkflows();
-        //setupWorkflowWithActivityRetries();
+        setupFailedWorkflows();
+        setupCompletedWorkflows();
+        setupRunningWorkflows();
+        setupCronWorkflows();
+        setupWorkflowWithActivityRetries();
     }
 
     private static void setupFailedWorkflows() {

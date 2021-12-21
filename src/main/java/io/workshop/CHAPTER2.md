@@ -1,11 +1,10 @@
 # Java SDK Workshop - Chapter 2 - Let's keep going...
 
 * [Section 1 - Client APIs continued](#Section-1)
-* [Section 1 - Sleep Duration](#Section-2)
-* [Section 2 - Versioning](#Section-3)
-* [Section 3 - Error Handling](#Section-4)
-* [Section 4 - Cancellation](#Section-5)
-* [Section 4 - Compensation](#Section-6)
+* [Section 2 - Sleep Duration](#Section-2)
+* [Section 3 - Versioning](#Section-3)
+* [Section 4 - Error Handling](#Section-4)
+* [Section 5 - Dynamic Workflow / Activities](#Section-5)
 
 # Section 1
 
@@ -58,56 +57,34 @@ and will learn how to get the most out of it in cases of failures, or workers be
 
 ## Error Handling
 
-* Handling workflow timeout on client
-  *
+* Handling workflow timeouts
+* Handling workflow errors
+* Handling Activity timeouts in wf code
+* Handling Activity errors in wf code
+* Handling Activity errors in child wf and wf code
 
-
-By default:
+Notes:
 * Workflows don't have retry options - not retried when failed or timed out
-* Workflow is retried only if you specify its retry options
-
-
-* Workflow code throws exception that extends TemporalFailure
-
-
 * Any exception that doesn’t extend TemporalFailure is converted to ApplicationFailure when thrown from a workflow or an activity.
+* A syncronous workflow invocation always returns WorkflowException that contains original failure as cause
 * Calls to activities always throw ActivityFailure with an exception that caused the failure as a cause. 
-So a NullPointerException thrown from an activity is going to be delivered to the workflow 
-(after exhausting all retries according to the retry options) as an 
-ActivityFailure that has an ApplicationFailure with a type equal to `java.lang.NullPointerException" as a cause.
+* Calls to child workflows always throw ChildWorkflowFailure with original failure as a cause
 
 
-An activity invocation always throws ActivityFailure with an original failure as a cause.
-A child workfow invocation always throws ChildWorkflowFailure with an original failure as a cause.
-A synchronous workflow invocation always returns WorkflowException which will contain the workflow failure as a cause.
+Notable cases:
+1. Workflow code throws exception that extends TemporalFailure: 
+ - Workflow fails. Workflow is retried (by executing it from beginning) only if retry options are specified.
+   
+2. Workflow code throws exception that does not extend TemporalFailure, but it does specify it in WorkflowImplementationOptions.setFailWorkflowExceptionTypes
+ - same as (1)
 
+3. How are workflow retries modeled? 
+ - It's modeled as a new workflow run. It gets a new run id. The previous run data (event history) is available
+up to the set retention period.
 
-Workflow error handling
-By default, workflows by default don’t have retry options and are not retried when failed or timed out.
-
-Case 1 : thrown Exception extends Temporal Failure
-Expected Result : Workflow fails and closes with no retries.
-
-Workflow fails and is retried (by executing from the beginning) only if retry options are specified.
-
-Case 2 : thrown Exception does not extend TemporalFailure and is specified in WorkflowImplementationOptions.setFailWorkflowExceptionTypes
-Expected Result : Workflow retries from scratch, ignoring EventHistory and re-executing any activities as well as the special Workflow.random*() methods.
-
-The same as Case 1. Workflow fails and is retried (by executing from the beginning) only if retry options are specified.
-
-Q : In the event of a full retry, is the pervious EventHistory retained anywhere?
-
-The workflow retry is modeled as a new workflow run. So it gets a new runId. The previous run data including its event history is still available up to the retention period.
-
-Case 3 : thrown Exception does not extend TemporalFailure and is not specified in WorkflowImplementationOptions.setFailWorkflowExceptionTypes (like an NPE)
-Expected Result : Workflow replays indefinitely or until hitting a timeout, using the Event History, waiting for a fix.
-
-
+4. Workflow code throws Exception that does not extend TemporalFailure and is not specified in WorkflowImplementationOptions.setFailWorkflowExceptionTypes
+ - Workflow task is replayed until we it a timeout (wf run/execution), waiting for a fix.
 
 # Section 5
 
-## Cancellation
-
-# Section 6
-
-## Compensation 
+## Dynamic Workflow / Activities

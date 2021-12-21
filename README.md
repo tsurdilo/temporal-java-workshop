@@ -27,16 +27,13 @@
 * [Section 2 - Sleep Duration](src/main/java/io/workshop/CHAPTER2.md#Section-2)
 * [Section 2 - Versioning](src/main/java/io/workshop/CHAPTER2.md#Section-3)
 * [Section 3 - Error Handling](src/main/java/io/workshop/CHAPTER2.md#Section-4)
-* [Section 4 - Cancellation](src/main/java/io/workshop/CHAPTER2.md#Section-5)
-* [Section 4 - Compensation](src/main/java/io/workshop/CHAPTER2.md#Section-6)
+* [Section 5 - Dynamic Workflow / Activities](src/main/java/io/workshop/CHAPTER2.md#Section-5)
 
 
 ## 3. Things planned for future Workshops
 
 * Long-running activities - heart-beat
 * Manual completion (activities)
-* Workflow versioning
-* Dynamic Workflows/Activities
 * Data Converters
 * Interceptors (workflow/activity)
 * SDK Metrics / Server Metrics

@@ -30,32 +30,32 @@ public class ClientFunctions {
     public static final String taskQueue = "c2s3TaskQueue";
 
     public static void main(String[] args) {
-        // listOpenWorkflows(null); // Does not need ES
+        listOpenWorkflows(null); // Does not need ES
 
-        // listClosedWorkflows(null); // Does not need ES
+        //listClosedWorkflows(null); // Does not need ES
 
         // TODO - set workflow id and run id to actually open wf
         WorkflowExecution execution = WorkflowExecution.newBuilder()
-                .setWorkflowId("childWorkflow-0")
-                .setRunId("2d08ea81-f628-4ab1-afb3-96d8fa571e7a")
+                .setWorkflowId("parentWorkflow-0")
+                .setRunId("13694fdd-de38-41f9-a4ae-31465654957c")
                 .build();
-//        describeWorkflowExecution(execution);
+        //describeWorkflowExecution(execution);
 
         //printFailedWorkflowsWithReason(null);
 
-        // printWorkflowStacktrace(execution);
+        //printWorkflowStacktrace(execution);
 
         // TODO - set workflow id and run id to an actual cron wf
         WorkflowExecution cronExecution = WorkflowExecution.newBuilder()
                 .setWorkflowId("CronWorkflow")
-                .setRunId("48d77756-9255-4a79-85ea-6c2d87dd6fab")
+                .setRunId("eaed0f26-b923-4d42-b7a9-e49e9477d721")
                 .build();
         //getCronScheduleFor(cronExecution);
 
         // TODO - set workflow id and run id to an actual cron wf
         WorkflowExecution activityRetriesExec = WorkflowExecution.newBuilder()
                 .setWorkflowId("WfWithActivityRetries")
-                .setRunId("578966bd-e202-4c8b-8f1b-99b492c374fb")
+                .setRunId("8a690a52-94fa-42f8-b783-fd6ad0fb59ca")
                 .build();
         //getActivitiesWithRetriesOver(5, null);
 
@@ -65,7 +65,7 @@ public class ClientFunctions {
 
         //getClusterInfo();
 
-        describeTaskQueue();
+        //describeTaskQueue();
     }
 
     private static void listOpenWorkflows(ByteString token) {
@@ -268,7 +268,6 @@ public class ClientFunctions {
         // Note listNamespaceRequest is paginated!
         ListNamespacesRequest req =
                 ListNamespacesRequest.newBuilder()
-                        .setPageSize(1)
                         .build();
         ListNamespacesResponse res = service.blockingStub().listNamespaces(req);
         for (DescribeNamespaceResponse response : res.getNamespacesList()) {
