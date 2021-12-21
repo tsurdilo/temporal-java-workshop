@@ -83,8 +83,12 @@ Notable cases:
 up to the set retention period.
 
 4. Workflow code throws Exception that does not extend TemporalFailure and is not specified in WorkflowImplementationOptions.setFailWorkflowExceptionTypes
- - Workflow task is replayed until we it a timeout (wf run/execution), waiting for a fix.
+ - Workflow task is replayed until we hit a timeout (wf run/execution), waiting for a fix.
 
 # Section 5
 
 ## Dynamic Workflow / Activities
+
+* Dynamic Workflow impl
+* Dynamic Activity impl
+* Show how to start, signal and query dynamic wf
