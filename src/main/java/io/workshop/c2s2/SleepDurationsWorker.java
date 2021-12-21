@@ -4,7 +4,6 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
-import io.workshop.c2s3.CustomerWorkflowImpl;
 
 public class SleepDurationsWorker {
     public static final String TASK_QUEUE = "sleepingWorkflowTaskQueue";

@@ -15,26 +15,18 @@ public class SleepWorkflowImpl implements SleepWorkflow {
     @Override
     public void exec(long myTime) {
         // 1. Sleep from when the workflow run starts
-        Workflow.sleep(myTime);
+        // TODO - start the starter before you start the worker to show this
+        //Workflow.sleep(myTime);
 
         // 2. Sleep from when the workflow run was scheduled
-        //sleepForTimeAfterWfScheduled(myTime);
+        // TODO - start the started before you start the worker to show this
+//        sleepForTimeAfterWfScheduled(myTime);
 
         // 3. at exact time
-        //sleepForExactTime(myTime);
+        // TODO - change the starter code to do exact time
+//        sleepForExactTime(myTime);
     }
 
-    private void sleepForExactTime(long myTime) {
-        // Note currentTimeMillis is in UTC time
-        long timeToStart = myTime - Workflow.currentTimeMillis();
-
-        String toStart = String.format("%d min, %d sec",
-                TimeUnit.MILLISECONDS.toMinutes(timeToStart),
-                TimeUnit.MILLISECONDS.toSeconds(timeToStart) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeToStart)));
-        System.out.println("Time to start: " + toStart);
-        Workflow.sleep(timeToStart);
-    }
 
     private void sleepForTimeAfterWfScheduled(long myTime) {
         // get the time since start of wf execution
@@ -49,7 +41,21 @@ public class SleepWorkflowImpl implements SleepWorkflow {
 
         logger.info("Time since started: " + since);
         long sleepDuration = myTime - timeSinceStarted;
-        Workflow.sleep(sleepDuration);
+        if(sleepDuration > 0) {
+            Workflow.sleep(sleepDuration);
+        }
+    }
+
+    private void sleepForExactTime(long myTime) {
+        // Note currentTimeMillis is in UTC time
+        long timeToStart = myTime - Workflow.currentTimeMillis();
+
+        String toStart = String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(timeToStart),
+                TimeUnit.MILLISECONDS.toSeconds(timeToStart) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeToStart)));
+        System.out.println("Time to start: " + toStart);
+        Workflow.sleep(timeToStart);
     }
 
     private String showInEastern(long timeInMillis) {
