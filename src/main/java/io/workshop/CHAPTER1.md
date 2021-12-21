@@ -8,7 +8,7 @@
 * [Section 6 - Testing](#Section-6)
 
 <p align="center">
- <a href="https://www.youtube.com/watch?v=VoSiIwkvuX0&t=6504s"><img src="../../../../../media/workshop-1-video.png" width="450"/></a>
+ <a href="https://www.youtube.com/watch?v=VoSiIwkvuX0"><img src="../../../../../media/workshop-1-video.png"/></a>
 </p>
 
 # Section 1
