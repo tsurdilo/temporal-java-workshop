@@ -35,21 +35,32 @@ public class S1WFUtils {
      * For non-es use ListOpenWorkflowExecutionsRequest and ListClosedWorkflowExecutionRequest
      * @param query
      */
-    private static void printWorkflowExecutions(String query) {
+    private static void listWorkflowExecutionsWithQuery(String query, ByteString token) {
+        ListWorkflowExecutionsRequest request;
 
-        // TODO pagination
-        ListOpenWorkflowExecutionsRequest reg;
-
-        ListWorkflowExecutionsRequest listWorkflowExecutionRequest =
-                ListWorkflowExecutionsRequest.newBuilder()
-                        .setNamespace(client.getOptions().getNamespace())
-                        .setQuery(query)
-                        .build();
-        ListWorkflowExecutionsResponse listWorkflowExecutionsResponse =
-                service.blockingStub().listWorkflowExecutions(listWorkflowExecutionRequest);
-        for(WorkflowExecutionInfo workflowExecutionInfo : listWorkflowExecutionsResponse.getExecutionsList()) {
+        if(token == null) {
+            request =
+                    ListWorkflowExecutionsRequest.newBuilder()
+                            .setNamespace(client.getOptions().getNamespace())
+                            .setQuery(query)
+                            .build();
+        } else {
+            request =
+                    ListWorkflowExecutionsRequest.newBuilder()
+                            .setNamespace(client.getOptions().getNamespace())
+                            .setQuery(query)
+                            .setNextPageToken(token)
+                            .build();
+        }
+        ListWorkflowExecutionsResponse response =
+                service.blockingStub().listWorkflowExecutions(request);
+        for(WorkflowExecutionInfo workflowExecutionInfo : response.getExecutionsList()) {
             System.out.println("Workflow ID: " + workflowExecutionInfo.getExecution().getWorkflowId() + " Run ID: " +
                     workflowExecutionInfo.getExecution().getRunId() + " Status: " + workflowExecutionInfo.getStatus());
+        }
+
+        if(response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
+            listWorkflowExecutionsWithQuery(query, response.getNextPageToken());
         }
     }
 
@@ -308,7 +319,7 @@ public class S1WFUtils {
 
 //        // 2) for searchAttributes
 //        // Using built-in search attributes
-//        printWorkflowExecutions("ExecutionStatus='Completed'");
+//        listWorkflowExecutionsWithQuery("ExecutionStatus='Completed'", null);
 //        // Customer workflows where customer is over 20
 //        printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20");
 //        // Customer workflows where customer title is Ms and age is over 30
