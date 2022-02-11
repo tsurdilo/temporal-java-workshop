@@ -2,6 +2,7 @@ package io.workshop.c1s1;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.testing.TestWorkflowRule;
 import io.temporal.testing.WorkflowReplayer;
 import org.junit.Rule;
@@ -46,5 +47,12 @@ public class GreetingWorkflowTest {
     public void replayFromHistory() throws Exception {
         WorkflowReplayer.replayWorkflowExecutionFromResource(
                 "s1history.json", GreetingWorkflowImpl.class);
+    }
+
+    //@Test
+    public void getHistoryAndReplay() throws Exception {
+        String jsonHistory =
+                S1WFUtils.getWorkflowExecutionHistoryAsJson("c1GreetingWorkflow", "87411ad0-5247-454a-91f5-ac182e037f19");
+        WorkflowReplayer.replayWorkflowExecution(jsonHistory, GreetingWorkflowImpl.class);
     }
 }

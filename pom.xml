@@ -22,6 +22,8 @@
 		<version.junit>4.13.2</version.junit>
 		<version.junit.jupiter>5.8.1</version.junit.jupiter>
 		<version.org.slf4j>1.7.26</version.org.slf4j>
+		<version.jsonpath>2.6.0</version.jsonpath>
+		<version.jackson>2.13.1</version.jackson>
 		<java.module.name>${project.name}</java.module.name>
 	</properties>
 
@@ -49,6 +51,30 @@
 			<artifactId>temporal-testing</artifactId>
 			<scope>test</scope>
 			<version>${version.temporal}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${version.jackson}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${version.jackson}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${version.jackson}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${version.jsonpath}</version>
 		</dependency>
 
 		<dependency>

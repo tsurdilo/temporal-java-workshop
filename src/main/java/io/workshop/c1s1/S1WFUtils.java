@@ -1,6 +1,7 @@
 package io.workshop.c1s1;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.util.JsonFormat;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.history.v1.HistoryEvent;
 import io.temporal.api.workflow.v1.PendingActivityInfo;
@@ -124,6 +125,7 @@ public class S1WFUtils {
         }
     }
 
+
     private static void getActivitiesWithRetriesOver(int retryCount) {
         ListOpenWorkflowExecutionsRequest listOpenWorkflowExecutionsRequest =
                 ListOpenWorkflowExecutionsRequest.newBuilder()
@@ -192,6 +194,27 @@ public class S1WFUtils {
                 historyEvent.getWorkflowExecutionStartedEventAttributes().getInput();
                 // ...
             }
+        }
+    }
+
+    public static String getWorkflowExecutionHistoryAsJson(String wfId, String wfRunId) {
+        GetWorkflowExecutionHistoryRequest request =
+                GetWorkflowExecutionHistoryRequest.newBuilder()
+                        .setNamespace("default")
+                        .setExecution(WorkflowExecution.newBuilder()
+                                .setWorkflowId(wfId)
+                                .setRunId(wfRunId)
+                                .build())
+                        .build();
+        GetWorkflowExecutionHistoryResponse response =
+                service.blockingStub().getWorkflowExecutionHistory(request);
+        try {
+            String jsonHistory = JsonFormat.printer().print(response.getHistory());
+            return HistoryJsonUtils.protoJsonToHistoryFormatJson(
+                    jsonHistory);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -280,6 +303,8 @@ public class S1WFUtils {
     }
 
     public static void main(String[] args) {
+
+        getWorkflowExecutionHistoryAsJson("c1GreetingWorkflow", "87411ad0-5247-454a-91f5-ac182e037f19");
         //printArchivedWorkflowExecutions("ExecutionStatus=2");
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
@@ -288,7 +313,7 @@ public class S1WFUtils {
 
         //printWorkflowExecutionHistory(client, "HelloPeriodicWorkflow", "6c989861-deca-47e7-bfdf-05970b810355", null, null);
 
-        printFailedWorkflowsWithReason(null);
+//        printFailedWorkflowsWithReason(null);
 
         //printDescribeWorkflowExecution(client, "HelloPeriodicWorkflow", "6c989861-deca-47e7-bfdf-05970b810355");
 //        ListNamespacesResponse response = client.getWorkflowServiceStubs().blockingStub().listNamespaces(

@@ -68,9 +68,9 @@ public class GreetingStarter {
                 GreetingWorkflow.class,
                 WorkflowOptions.newBuilder()
                         .setWorkflowId(workflowId)
-                        .setWorkflowRunTimeout(Duration.ofSeconds(1))
+//                        .setWorkflowRunTimeout(Duration.ofSeconds(1))
                         //.setWorkflowExecutionTimeout(Duration.ofSeconds(20))
-                        //.setWorkflowRunTimeout(Duration.ofSeconds(20))
+                        .setWorkflowRunTimeout(Duration.ofSeconds(20))
                         .setTaskQueue(taskQueue)
                         .build()
         );

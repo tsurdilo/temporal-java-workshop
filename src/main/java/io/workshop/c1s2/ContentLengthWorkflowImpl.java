@@ -2,6 +2,7 @@ package io.workshop.c1s2;
 
 import io.temporal.activity.Activity;
 import io.temporal.activity.ActivityOptions;
+import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
 import io.temporal.workflow.*;
 import org.slf4j.Logger;
@@ -18,7 +19,11 @@ public class ContentLengthWorkflowImpl implements ContentLengthWorkflow {
     private final ContentLengthActivity activities =
             Workflow.newActivityStub(
                     ContentLengthActivity.class,
-                    ActivityOptions.newBuilder().setStartToCloseTimeout(Duration.ofSeconds(2)).build());
+                    ActivityOptions.newBuilder()
+                            .setRetryOptions(RetryOptions.newBuilder()
+                                    .setDoNotRetry(NullPointerException.class.getName())
+                                    .build())
+                            .setStartToCloseTimeout(Duration.ofSeconds(2)).build());
 
 
     @Override
