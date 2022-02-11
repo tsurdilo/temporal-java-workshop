@@ -49,7 +49,7 @@ public class GreetingWorkflowTest {
                 "s1history.json", GreetingWorkflowImpl.class);
     }
 
-    //@Test
+//    @Test
     public void getHistoryAndReplay() throws Exception {
         String jsonHistory =
                 S1WFUtils.getWorkflowExecutionHistoryAsJson("c1GreetingWorkflow", "87411ad0-5247-454a-91f5-ac182e037f19");

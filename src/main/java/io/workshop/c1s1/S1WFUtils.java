@@ -10,6 +10,7 @@ import io.temporal.api.workflowservice.v1.*;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowStub;
 import io.temporal.common.RetryOptions;
+import io.temporal.internal.common.WorkflowExecutionHistory;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 
 import java.util.Optional;
@@ -206,16 +207,8 @@ public class S1WFUtils {
                                 .setRunId(wfRunId)
                                 .build())
                         .build();
-        GetWorkflowExecutionHistoryResponse response =
-                service.blockingStub().getWorkflowExecutionHistory(request);
-        try {
-            String jsonHistory = JsonFormat.printer().print(response.getHistory());
-            return HistoryJsonUtils.protoJsonToHistoryFormatJson(
-                    jsonHistory);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return new WorkflowExecutionHistory(
+                service.blockingStub().getWorkflowExecutionHistory(request).getHistory()).toJson(true);
     }
 
     /**
