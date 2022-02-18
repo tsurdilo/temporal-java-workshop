@@ -3,7 +3,9 @@ package io.workshop.c1s1;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.JsonFormat;
 import io.temporal.api.common.v1.WorkflowExecution;
+import io.temporal.api.enums.v1.ArchivalState;
 import io.temporal.api.history.v1.HistoryEvent;
+import io.temporal.api.namespace.v1.NamespaceConfig;
 import io.temporal.api.workflow.v1.PendingActivityInfo;
 import io.temporal.api.workflow.v1.WorkflowExecutionInfo;
 import io.temporal.api.workflowservice.v1.*;
@@ -35,12 +37,13 @@ public class S1WFUtils {
     /**
      * Prints workflow executions, given a provided query. Note this requires ES.
      * For non-es use ListOpenWorkflowExecutionsRequest and ListClosedWorkflowExecutionRequest
+     *
      * @param query
      */
     private static void listWorkflowExecutionsWithQuery(String query, ByteString token) {
         ListWorkflowExecutionsRequest request;
 
-        if(token == null) {
+        if (token == null) {
             request =
                     ListWorkflowExecutionsRequest.newBuilder()
                             .setNamespace(client.getOptions().getNamespace())
@@ -56,12 +59,12 @@ public class S1WFUtils {
         }
         ListWorkflowExecutionsResponse response =
                 service.blockingStub().listWorkflowExecutions(request);
-        for(WorkflowExecutionInfo workflowExecutionInfo : response.getExecutionsList()) {
+        for (WorkflowExecutionInfo workflowExecutionInfo : response.getExecutionsList()) {
             System.out.println("Workflow ID: " + workflowExecutionInfo.getExecution().getWorkflowId() + " Run ID: " +
                     workflowExecutionInfo.getExecution().getRunId() + " Status: " + workflowExecutionInfo.getStatus());
         }
 
-        if(response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
+        if (response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
             listWorkflowExecutionsWithQuery(query, response.getNextPageToken());
         }
     }
@@ -69,7 +72,7 @@ public class S1WFUtils {
     private static void printFailedWorkflowsWithReason(ByteString token) {
         ListWorkflowExecutionsRequest request;
 
-        if(token == null) {
+        if (token == null) {
             request = ListWorkflowExecutionsRequest.newBuilder()
                     .setNamespace(client.getOptions().getNamespace())
                     .setQuery("ExecutionStatus='Failed'")
@@ -85,7 +88,7 @@ public class S1WFUtils {
         }
         ListWorkflowExecutionsResponse response =
                 service.blockingStub().listWorkflowExecutions(request);
-        for(WorkflowExecutionInfo info : response.getExecutionsList()) {
+        for (WorkflowExecutionInfo info : response.getExecutionsList()) {
             HistoryEvent lastHistoryEvent = getLastHistoryEvent(info.getExecution(), null);
             // here you can get the failure and compare/check against what you want/need
             System.out.println("wfid: " + info.getExecution().getWorkflowId());
@@ -93,7 +96,7 @@ public class S1WFUtils {
             System.out.println("history: " + lastHistoryEvent);
         }
 
-        if(response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
+        if (response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
             printFailedWorkflowsWithReason(response.getNextPageToken());
         }
     }
@@ -102,7 +105,7 @@ public class S1WFUtils {
         GetWorkflowExecutionHistoryRequest request;
         HistoryEvent lastHistoryEvent;
 
-        if(token == null) {
+        if (token == null) {
             request =
                     GetWorkflowExecutionHistoryRequest.newBuilder()
                             .setNamespace(client.getOptions().getNamespace())
@@ -118,8 +121,8 @@ public class S1WFUtils {
         }
         GetWorkflowExecutionHistoryResponse response =
                 service.blockingStub().getWorkflowExecutionHistory(request);
-        lastHistoryEvent = response.getHistory().getEventsList().get( response.getHistory().getEventsList().size() - 1);
-        if(response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
+        lastHistoryEvent = response.getHistory().getEventsList().get(response.getHistory().getEventsList().size() - 1);
+        if (response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
             return getLastHistoryEvent(wfExec, response.getNextPageToken());
         } else {
             return lastHistoryEvent;
@@ -135,15 +138,15 @@ public class S1WFUtils {
 
         ListOpenWorkflowExecutionsResponse listOpenWorkflowExecutionsResponse =
                 service.blockingStub().listOpenWorkflowExecutions(listOpenWorkflowExecutionsRequest);
-        for(WorkflowExecutionInfo info : listOpenWorkflowExecutionsResponse.getExecutionsList()) {
+        for (WorkflowExecutionInfo info : listOpenWorkflowExecutionsResponse.getExecutionsList()) {
             DescribeWorkflowExecutionRequest describeWorkflowExecutionRequest =
                     DescribeWorkflowExecutionRequest.newBuilder()
                             .setNamespace(client.getOptions().getNamespace())
                             .setExecution(info.getExecution()).build();
             DescribeWorkflowExecutionResponse describeWorkflowExecutionResponse =
                     service.blockingStub().describeWorkflowExecution(describeWorkflowExecutionRequest);
-            for(PendingActivityInfo activityInfo : describeWorkflowExecutionResponse.getPendingActivitiesList()) {
-                if(activityInfo.getAttempt() > retryCount) {
+            for (PendingActivityInfo activityInfo : describeWorkflowExecutionResponse.getPendingActivitiesList()) {
+                if (activityInfo.getAttempt() > retryCount) {
                     System.out.println("Activity Type: " + activityInfo.getActivityType());
                     System.out.println("Activity attempt: " + activityInfo.getAttempt());
                     System.out.println("Last failure message : " + activityInfo.getLastFailure().getMessage());
@@ -164,7 +167,7 @@ public class S1WFUtils {
                         .build();
         ListWorkflowExecutionsResponse listWorkflowExecutionsResponse =
                 service.blockingStub().listWorkflowExecutions(listWorkflowExecutionRequest);
-        for(WorkflowExecutionInfo workflowExecutionInfo : listWorkflowExecutionsResponse.getExecutionsList()) {
+        for (WorkflowExecutionInfo workflowExecutionInfo : listWorkflowExecutionsResponse.getExecutionsList()) {
 
             WorkflowStub existingUntyped = client.newUntypedWorkflowStub(workflowExecutionInfo.getExecution().getWorkflowId(),
                     Optional.empty(), Optional.empty());
@@ -183,7 +186,7 @@ public class S1WFUtils {
                         .build();
         ListWorkflowExecutionsResponse listWorkflowExecutionsResponse =
                 service.blockingStub().listWorkflowExecutions(listWorkflowExecutionRequest);
-        for(WorkflowExecutionInfo workflowExecutionInfo : listWorkflowExecutionsResponse.getExecutionsList()) {
+        for (WorkflowExecutionInfo workflowExecutionInfo : listWorkflowExecutionsResponse.getExecutionsList()) {
             GetWorkflowExecutionHistoryRequest getWorkflowExecutionHistoryRequest =
                     GetWorkflowExecutionHistoryRequest.newBuilder()
                             .setNamespace("default")
@@ -191,7 +194,7 @@ public class S1WFUtils {
                             .build();
             GetWorkflowExecutionHistoryResponse getWorkflowExecutionHistoryResponse =
                     service.blockingStub().getWorkflowExecutionHistory(getWorkflowExecutionHistoryRequest);
-            for(HistoryEvent historyEvent : getWorkflowExecutionHistoryResponse.getHistory().getEventsList()) {
+            for (HistoryEvent historyEvent : getWorkflowExecutionHistoryResponse.getHistory().getEventsList()) {
                 historyEvent.getWorkflowExecutionStartedEventAttributes().getInput();
                 // ...
             }
@@ -246,12 +249,12 @@ public class S1WFUtils {
      * Print execution history for a workflow given its workflow id and run id
      */
     public static void printWorkflowExecutionHistory(WorkflowClient client, String workflowId, String runId, WorkflowStub wfStub, ByteString token) {
-        if(wfStub == null) {
+        if (wfStub == null) {
             wfStub = client.newUntypedWorkflowStub(workflowId, Optional.of(runId), Optional.empty());
         }
 
         GetWorkflowExecutionHistoryRequest workflowExecutionHistoryRequest;
-        if(token == null) {
+        if (token == null) {
             workflowExecutionHistoryRequest =
                     GetWorkflowExecutionHistoryRequest.newBuilder()
                             .setNamespace(client.getOptions().getNamespace())
@@ -268,10 +271,10 @@ public class S1WFUtils {
 
         GetWorkflowExecutionHistoryResponse workflowExecutionHistoryResponse =
                 service.blockingStub().getWorkflowExecutionHistory(workflowExecutionHistoryRequest);
-        for(HistoryEvent historyEvent : workflowExecutionHistoryResponse.getHistory().getEventsList()) {
+        for (HistoryEvent historyEvent : workflowExecutionHistoryResponse.getHistory().getEventsList()) {
             System.out.println(historyEvent.getEventId() + " - " + historyEvent.getEventType());
         }
-        if(workflowExecutionHistoryResponse.getNextPageToken() != null && workflowExecutionHistoryResponse.getNextPageToken().size() > 0) {
+        if (workflowExecutionHistoryResponse.getNextPageToken() != null && workflowExecutionHistoryResponse.getNextPageToken().size() > 0) {
             printWorkflowExecutionHistory(client, workflowId, runId, wfStub, workflowExecutionHistoryResponse.getNextPageToken());
         }
     }
@@ -293,6 +296,34 @@ public class S1WFUtils {
                 client.getWorkflowServiceStubs().blockingStub().resetWorkflowExecution(resetWorkflowExecutionRequest);
 
         System.out.println("Reset execution id: " + resetWorkflowExecutionResponse.getRunId());
+    }
+
+    public static void enableNamespaceArchival(String namespace, String historyArchivalURI, String visibilityArchivalURI) {
+        UpdateNamespaceResponse res = client.getWorkflowServiceStubs().blockingStub().updateNamespace(
+                UpdateNamespaceRequest.newBuilder()
+                        .setNamespace(namespace)
+                        .setConfig(NamespaceConfig.newBuilder()
+                                .setVisibilityArchivalState(ArchivalState.ARCHIVAL_STATE_ENABLED)
+                                .setHistoryArchivalState(ArchivalState.ARCHIVAL_STATE_ENABLED)
+                                .setHistoryArchivalUri(historyArchivalURI)
+                                .setVisibilityArchivalUri(visibilityArchivalURI)
+                                .build())
+                        .build()
+        );
+        System.out.println(res.getNamespaceInfo());
+    }
+
+    public static void disableNamespaceArchival(String namespace) {
+        UpdateNamespaceResponse res = client.getWorkflowServiceStubs().blockingStub().updateNamespace(
+                UpdateNamespaceRequest.newBuilder()
+                        .setNamespace(namespace)
+                        .setConfig(NamespaceConfig.newBuilder()
+                                .setVisibilityArchivalState(ArchivalState.ARCHIVAL_STATE_DISABLED)
+                                .setHistoryArchivalState(ArchivalState.ARCHIVAL_STATE_DISABLED)
+                                .build())
+                        .build()
+        );
+        System.out.println(res.getNamespaceInfo());
     }
 
     public static void main(String[] args) {
@@ -328,7 +359,6 @@ public class S1WFUtils {
 //        } catch(StatusRuntimeException e) {
 //            // ....
 //        }
-
 
 
         // 1) for signalWithStart and NPE  -- dont forget to fix issue and restart worker before restarting!!
