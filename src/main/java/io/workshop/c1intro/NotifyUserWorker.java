@@ -16,6 +16,7 @@ public class NotifyUserWorker {
         WorkerFactory workerFactory = WorkerFactory.newInstance(client);
         Worker worker = workerFactory.newWorker(taskQueue);
         worker.registerWorkflowImplementationTypes(NotifyUserAccountsWorkflow.class);
+        worker.registerActivitiesImplementations(new AccountActivitiesImpl());
 
         workerFactory.start();
     }

@@ -1,5 +1,6 @@
 package io.workshop.c1intro;
 
+import io.temporal.activity.ActivityOptions;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
 
@@ -10,12 +11,18 @@ public class NotifyUserAccountsWorkflow implements NotifyUserAccounts {
     private Logger logger = Workflow.getLogger(this.getClass().getName());
     private int customerCount = 0;
 
+    private AccountActivities accountActivities =
+            Workflow.newActivityStub(AccountActivities.class, ActivityOptions.newBuilder()
+                    .setStartToCloseTimeout(Duration.ofSeconds(3))
+                    .build());
+
     @Override
     public void notify(String[] accountIds) {
 
         for(String account : accountIds) {
             customerCount++;
-            logger.info("Java: notifying for: " + account);
+            logger.info("Notifying Account Id: " + account);
+            accountActivities.notify(account);
             Workflow.sleep(Duration.ofSeconds(2));
         }
     }
