@@ -1,4 +1,4 @@
-# Java SDK Workshop - Chapter 2 - Let's keep going...
+# Java SDK Workshop - Chapter 2 - Client APIs, Versioning and Error Handling
 
 * [Section 1 - Client APIs continued](#Section-1)
 * [Section 2 - Sleep Duration](#Section-2)

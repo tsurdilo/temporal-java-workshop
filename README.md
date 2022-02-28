@@ -23,9 +23,7 @@
 * [Section 5 - Child Workflows](src/main/java/io/workshop/CHAPTER1.md#section-5)
 * [Section 6 - Testing](src/main/java/io/workshop/CHAPTER1.md#section-6)
 
-## Chapters
-
-### 2. [Let's Keep Going...](src/main/java/io/workshop/CHAPTER2.md)
+### 2. [Client APIs, Versioning and Error Handling](src/main/java/io/workshop/CHAPTER2.md)
 
 * [Section 1 - Client APIs continued](src/main/java/io/workshop/CHAPTER2.md#Section-1)
 * [Section 2 - Sleep Duration](src/main/java/io/workshop/CHAPTER2.md#Section-2)
@@ -34,7 +32,17 @@
 * [Section 5 - Dynamic Workflow / Activities](src/main/java/io/workshop/CHAPTER2.md#Section-5)
 
 
-## 3. Things planned for future Workshops
+## 3. [TBD](src/main/java/io/workshop/CHAPTER3.md)
+* Workflow type, activity type, signal name, query name
+* Typed vs untyped stubs (workflow, activity, child workflow)
+* Client error handling
+* "Hidden" signals and queries
+* Cancellations
+* Activity heart-beat
+* Activity manual completion
+* Interceptors
+
+## 4. Things planned for future Workshops
 
 * Long-running activities - heart-beat
 * Manual completion (activities)

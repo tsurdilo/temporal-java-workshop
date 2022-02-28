@@ -28,7 +28,7 @@ public class S1WFUtils {
     // Note: by default set to "default" namespace, can change via WorkfowClientOptions
     public static final WorkflowClient client = WorkflowClient.newInstance(service);
 
-    // tast queue (server "end-point") that worker(s) listen to
+    // task queue (server "end-point") that worker(s) listen to
     public static final String taskQueue = "c1TaskQueue";
 
     public static final RetryOptions NO_RETRY = RetryOptions.newBuilder().setMaximumAttempts(1).build();

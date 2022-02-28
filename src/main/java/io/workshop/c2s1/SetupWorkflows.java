@@ -32,7 +32,7 @@ public class SetupWorkflows {
     // Note: by default set to "default" namespace, can change via WorkfowClientOptions
     public static final WorkflowClient client = WorkflowClient.newInstance(service);
 
-    // tast queue (server "end-point") that worker(s) listen to
+    // task queue (server "end-point") that worker(s) listen to
     public static final String taskQueue = "c2s3TaskQueue";
 
     // Set up for c2s1 (client apis)
