@@ -26,7 +26,7 @@
 ### 2. [Client APIs, Versioning and Error Handling](src/main/java/io/workshop/CHAPTER2.md)
 
 <p align="center">
- <a href="https://www.youtube.com/watch?v=h-TSDMULCf0"><img src="media/workshop-2-video.png"/></a>
+ <a href="https://www.youtube.com/watch?v=h-TSDMULCf0"><img src="media/workshop-2-video.png" width="50%"/></a>
 </p>
 
 * [Section 1 - Client APIs continued](src/main/java/io/workshop/CHAPTER2.md#Section-1)
