@@ -35,7 +35,7 @@
 * [Section 3 - Error Handling](src/main/java/io/workshop/CHAPTER2.md#Section-4)
 * [Section 5 - Dynamic Workflow / Activities](src/main/java/io/workshop/CHAPTER2.md#Section-5)
 
-### 3. [Workflow, Activity Types, ContinueASNew, Client error handling and more](src/main/java/io/workshop/CHAPTER3.md)
+### 3. [Workflow, Activity Types, ContinueAsNew, Client error handling and more](src/main/java/io/workshop/CHAPTER3.md)
 
 * [Section 1 - Types](src/main/java/io/workshop/CHAPTER3.md#Section-1)
 * [Section 2 - Typed vs untyped stubs](src/main/java/io/workshop/CHAPTER3.md#Section-2)

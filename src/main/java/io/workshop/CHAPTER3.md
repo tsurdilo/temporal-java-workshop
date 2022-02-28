@@ -1,4 +1,4 @@
-# Java SDK Workshop - Chapter 3 - Workflow, Activity Types, ContinueASNew, Client error handling and more
+# Java SDK Workshop - Chapter 3 - Workflow, Activity Types, ContinueAsNew, Client error handling and more
 
 * [Section 1 - Types](#Section-1)
 * [Section 2 - Typed vs untyped stubs](#Section-2)
