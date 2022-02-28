@@ -1,11 +1,10 @@
-# Java SDK Workshop - Chapter 3 - Workflow, Activity Types, Client error handking, Heartbeating and more
+# Java SDK Workshop - Chapter 3 - Workflow, Activity Types, ContinueASNew, Client error handling and more
 
 * [Section 1 - Types](#Section-1)
 * [Section 2 - Typed vs untyped stubs](#Section-2)
 * [Section 3 - Dynamic signals and queries with typed stubs](#Section-3)
-* [Section 3 - Client errors and setting up SSL/mTLS](#Section-4) TODO
+* [Section 3 - Client errors and setting up SSL/mTLS](#Section-4)
 * [Section 5 -ContinueAsNew and signals](#Section-5)
-* [Section 6 - Setting up SDK Metrics](#Section-6)
 
 # Section 1
 
@@ -44,7 +43,7 @@ Shows how to dynamically add signals and queries not exposed via workflow interf
 * Catching client errors 
 * Setting up SSL (mTLS)
 
-TODO - add url to github repo for setting up mtls on server
+* For adding mTLS support on server see samples repo [here](https://github.com/temporalio/samples-server).
 
 * Code in package [c3s4](c3s4)
 
@@ -55,11 +54,3 @@ TODO - add url to github repo for setting up mtls on server
 Demo on sending signals while workflow is doing continueAsNew
 
 * Code in package [c3s5](c3s5)
-
-# Section 6
-
-## Setting up SDK metrics
-
-Shows how to set up and view SDK metrics
-
-* Code in package [c3s6](c3s6)

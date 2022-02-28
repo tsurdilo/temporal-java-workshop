@@ -45,7 +45,7 @@ public class Starter {
         workflow.exit();
 
         // Attach to the latest run and query
-        sleep(3000);
+        sleep(5000);
         WorkflowStub untyped = client.newUntypedWorkflowStub(exec.getWorkflowId(),
                 Optional.of(exec.getRunId()), Optional.of("C3S5Workflow"));
         int total = untyped.getResult(Integer.class);
