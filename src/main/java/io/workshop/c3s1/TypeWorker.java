@@ -40,7 +40,6 @@ public class TypeWorker {
         // TODO set specific query name
 //        worker.registerWorkflowImplementationTypes(TypeWorkflowImpl.class);
 
-        // 3. Show multiple query names
 
         // 3. Show multiple activity types
         // "DoSomething" activity type is already registered with the worker

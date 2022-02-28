@@ -40,7 +40,7 @@
 * [Section 1 - Types](src/main/java/io/workshop/CHAPTER3.md#Section-1)
 * [Section 2 - Typed vs untyped stubs](src/main/java/io/workshop/CHAPTER3.md#Section-2)
 * [Section 3 - Dynamic signals and queries with typed stubs](src/main/java/io/workshop/CHAPTER3.md#Section-3)
-* [Section 3 - Client errors and setting up SSL/mTLS](src/main/java/io/workshop/CHAPTER3.md#Section-4)
+* [Section 4 - Client errors and setting up SSL/mTLS](src/main/java/io/workshop/CHAPTER3.md#Section-4)
 * [Section 5 -ContinueAsNew and signals](src/main/java/io/workshop/CHAPTER3.md#Section-5)
 
 ## 4. Things planned for future Workshops

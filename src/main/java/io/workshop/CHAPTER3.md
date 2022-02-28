@@ -3,7 +3,7 @@
 * [Section 1 - Types](#Section-1)
 * [Section 2 - Typed vs untyped stubs](#Section-2)
 * [Section 3 - Dynamic signals and queries with typed stubs](#Section-3)
-* [Section 3 - Client errors and setting up SSL/mTLS](#Section-4)
+* [Section 4 - Client errors and setting up SSL/mTLS](#Section-4)
 * [Section 5 -ContinueAsNew and signals](#Section-5)
 
 # Section 1
