@@ -27,10 +27,11 @@ public class TypeWorker {
         Worker worker = workerFactory.newWorker(taskQueue);
 
         // 1. Show multiple workflow types cannot be registered...
+        // Duplicated name of SIGNAL: "inputSignal" declared
         // TypeWorkflow workflow type is already registered with the worker
         // TODO show how to set workflow type via annotation
-//        worker.registerWorkflowImplementationTypes(TypeWorkflowImpl.class,
-//                TypeWorkflowImpl.class);
+        worker.registerWorkflowImplementationTypes(SimpleWorkflowImpl.class,
+                SimpleWorkflowImpl.class);
 
         // 2. Show multiple signal names / query names
         // Duplicated name of SIGNAL: "inputSignal" declared at "public abstract void io.workshop.c3s1.TypeWorkflow
@@ -46,8 +47,8 @@ public class TypeWorker {
         // Not that "D" is upper case!!
         // TODO show how to fix this via ActivityMethod annotations
         // TODO show activity interface namePrefix
-        worker.registerActivitiesImplementations(new TypeOneActivitiesImpl(),
-                new TypeTwoActivitiesImpl());
+//        worker.registerActivitiesImplementations(new TypeOneActivitiesImpl(),
+//                new TypeTwoActivitiesImpl());
 
         // 4. Show child workflow type
 
