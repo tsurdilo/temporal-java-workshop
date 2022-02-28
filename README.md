@@ -31,20 +31,16 @@
 * [Section 3 - Error Handling](src/main/java/io/workshop/CHAPTER2.md#Section-4)
 * [Section 5 - Dynamic Workflow / Activities](src/main/java/io/workshop/CHAPTER2.md#Section-5)
 
+### 3. [Workflow, Activity Types, Client error handking, Heartbeating and more](src/main/java/io/workshop/CHAPTER3.md)
 
-## 3. [TBD](src/main/java/io/workshop/CHAPTER3.md)
-* Workflow type, activity type, signal name, query name
-* Typed vs untyped stubs (workflow, activity, child workflow)
-* Client error handling
-* "Hidden" signals and queries
-* Cancellations
-* Activity heart-beat
-* Activity manual completion
-* Interceptors
+* [Section 1 - Types](src/main/java/io/workshop/CHAPTER3.md#Section-1)
+* [Section 2 - Typed vs untyped stubs](src/main/java/io/workshop/CHAPTER3.md#Section-2)
+* [Section 3 - Client errors and setting up SSL/mTLS](src/main/java/io/workshop/CHAPTER3.md#Section-3) TODO
+* [Section 4 - Dynamic signals and queries with typed stubs](src/main/java/io/workshop/CHAPTER3.md#Section-4)
+* [Section 5 -ContinueAsNew and signals](src/main/java/io/workshop/CHAPTER3.md#Section-5)
+* [Section 6 - Setting up SDK Metrics](src/main/java/io/workshop/CHAPTER3.md#Section-6)
 
 ## 4. Things planned for future Workshops
-
-* Long-running activities - heart-beat
 * Manual completion (activities)
 * Data Converters
 * Interceptors (workflow/activity)
