@@ -6,8 +6,6 @@ public class GreetingActivitiesImpl implements GreetingActivities {
     @Override
     public String getCustomerGreeting(Customer customer) {
 
-//        throw Activity.wrap(new NullPointerException("...simulated..."));
-
         String greeting = "";
         switch (customer.getLanguage()) {
             case "Spanish":
