@@ -62,10 +62,29 @@ public class S1WFUtils {
         for (WorkflowExecutionInfo workflowExecutionInfo : response.getExecutionsList()) {
             System.out.println("Workflow ID: " + workflowExecutionInfo.getExecution().getWorkflowId() + " Run ID: " +
                     workflowExecutionInfo.getExecution().getRunId() + " Status: " + workflowExecutionInfo.getStatus());
+            if(workflowExecutionInfo.getParentExecution() != null) {
+                System.out.println("****** PARENT: " + workflowExecutionInfo.getParentExecution().getWorkflowId() + " - " +
+                        workflowExecutionInfo.getParentExecution().getRunId());
+            }
         }
 
         if (response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
             listWorkflowExecutionsWithQuery(query, response.getNextPageToken());
+        }
+    }
+
+    private static void printCronSchedulesFor(String wfid) {
+        System.out.println("****** WFID: " + wfid);
+        ListWorkflowExecutionsRequest request =  ListWorkflowExecutionsRequest.newBuilder()
+                .setNamespace(client.getOptions().getNamespace())
+                .setQuery("WorkflowId=\"" + wfid + "\"")
+                .setPageSize(1000)
+                .build();
+
+        ListWorkflowExecutionsResponse response =
+                service.blockingStub().listWorkflowExecutions(request);
+        for (WorkflowExecutionInfo info : response.getExecutionsList()) {
+           System.out.println("CRON: " + getCronSchedule(info.getExecution()));
         }
     }
 
@@ -99,6 +118,19 @@ public class S1WFUtils {
         if (response.getNextPageToken() != null && response.getNextPageToken().size() > 0) {
             printFailedWorkflowsWithReason(response.getNextPageToken());
         }
+    }
+
+    public static String getCronSchedule(WorkflowExecution wfExec) {
+        GetWorkflowExecutionHistoryRequest req = GetWorkflowExecutionHistoryRequest.newBuilder()
+                .setNamespace(client.getOptions().getNamespace())
+                .setExecution(wfExec)
+                .build();
+        GetWorkflowExecutionHistoryResponse res =
+                service.blockingStub().getWorkflowExecutionHistory(req);
+
+        HistoryEvent firstEvent = res.getHistory().getEvents(0);
+
+        return firstEvent.getWorkflowExecutionStartedEventAttributes().getCronSchedule();
     }
 
     public static HistoryEvent getLastHistoryEvent(WorkflowExecution wfExec, ByteString token) {
@@ -230,6 +262,7 @@ public class S1WFUtils {
 
         DescribeWorkflowExecutionResponse resp =
                 client.getWorkflowServiceStubs().blockingStub().describeWorkflowExecution(describeWorkflowExecutionRequest);
+        System.out.println("**** PARENT: " + resp.getWorkflowExecutionInfo().getParentExecution().getWorkflowId());
 
         WorkflowExecutionInfo workflowExecutionInfo = resp.getWorkflowExecutionInfo();
         return workflowExecutionInfo.getStatus().toString();
@@ -327,14 +360,14 @@ public class S1WFUtils {
     }
 
     public static void main(String[] args) {
-
-        getWorkflowExecutionHistoryAsJson("c1GreetingWorkflow", "87411ad0-5247-454a-91f5-ac182e037f19");
+        printCronSchedulesFor("NEWc3s5Workflow2");
+//        getWorkflowExecutionHistoryAsJson("c1GreetingWorkflow", "87411ad0-5247-454a-91f5-ac182e037f19");
         //printArchivedWorkflowExecutions("ExecutionStatus=2");
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
         //resetWorkflow(client, "8bb671cf-b900-4253-b824-5f9ab2ce5946", "871d4771-6135-412a-8a93-b20c6da397db", 8);
-        //getActivitiesWithRetriesOver(2);
-
+//        getActivitiesWithRetriesOver(2);
+//        getWorkflowStatus(client, "055db52b-b7b6-3108-8c04-d5a36f668df6");
         //printWorkflowExecutionHistory(client, "HelloPeriodicWorkflow", "6c989861-deca-47e7-bfdf-05970b810355", null, null);
 
 //        printFailedWorkflowsWithReason(null);
