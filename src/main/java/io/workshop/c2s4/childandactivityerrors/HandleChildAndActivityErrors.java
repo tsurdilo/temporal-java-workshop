@@ -2,6 +2,7 @@ package io.workshop.c2s4.childandactivityerrors;
 
 import io.temporal.activity.ActivityInterface;
 import io.temporal.activity.ActivityOptions;
+import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.failure.ActivityFailure;
@@ -69,7 +70,6 @@ public class HandleChildAndActivityErrors {
                 if(e.getCause().getCause() != null) {
                     logger.info("\n**** (child) cause->cause: message: " + e.getCause().getCause().getMessage());
                 }
-
                 // throw and handle in workflow method
                 throw Workflow.wrap(e);
             }
@@ -83,7 +83,11 @@ public class HandleChildAndActivityErrors {
         public void exec() {
 
             ChildWorkflowOptions options = ChildWorkflowOptions.newBuilder()
+                    .setWorkflowId("MyWorkflowId")
                     .setWorkflowRunTimeout(Duration.ofSeconds(5))
+                    .setWorkflowIdReusePolicy(
+                            WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE
+                    )
                     .build();
 
             MyChildWorkflow childWorkflow = Workflow.newChildWorkflowStub(MyChildWorkflow.class, options);

@@ -1,0 +1,1 @@
+## External Workflow Stub (sending signals from one workflow to another)
