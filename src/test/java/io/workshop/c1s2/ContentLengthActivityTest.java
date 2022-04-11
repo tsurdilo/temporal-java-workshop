@@ -1,19 +1,41 @@
 package io.workshop.c1s2;
 
 import io.temporal.testing.TestActivityEnvironment;
+import org.junit.Before;
 import org.junit.Test;
 
-public class ContentLengthActivityTest {
-    @Test
-    public void testWithRealActivities() {
-        TestActivityEnvironment testEnvironment = TestActivityEnvironment.newInstance();
-        testEnvironment.registerActivitiesImplementations(new ContentLengthActivityImpl());
+import static org.junit.Assert.*;
 
-        ContentLengthActivity activity = testEnvironment.newActivityStub(ContentLengthActivity.class);
+public class ContentLengthActivityTest {
+
+    private TestActivityEnvironment testEnv;
+
+    @Before
+    public void setUp() {
+        testEnv = TestActivityEnvironment.newInstance();
+    }
+
+    @Test
+    public void testContentLengthForGoogle() {
+        testEnv.registerActivitiesImplementations(new ContentLengthActivityImpl());
+
+        ContentLengthActivity activity = testEnv.newActivityStub(ContentLengthActivity.class);
         ContentLengthInfo c = activity.count("http://www.google.com");
 
-        System.out.println("C: " + c.getWebsiteMap().size());
+        assertNotNull(c.getWebsiteMap());
+        assertEquals(1, c.getWebsiteMap().size());
+        assertTrue(c.getWebsiteMap().get("http://www.google.com") > 0);
+    }
 
-        testEnvironment.close();
+    @Test
+    public void testContentLengthForTemporal() {
+        testEnv.registerActivitiesImplementations(new ContentLengthActivityImpl());
+
+        ContentLengthActivity activity = testEnv.newActivityStub(ContentLengthActivity.class);
+        ContentLengthInfo c = activity.count("https://temporal.io/");
+
+        assertNotNull(c.getWebsiteMap());
+        assertEquals(1, c.getWebsiteMap().size());
+        assertTrue(c.getWebsiteMap().get("https://temporal.io/") > 0);
     }
 }
