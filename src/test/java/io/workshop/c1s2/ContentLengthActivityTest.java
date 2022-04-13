@@ -31,7 +31,8 @@ public class ContentLengthActivityTest {
         assertEquals(1, c.getWebsiteMap().size());
         assertTrue(c.getWebsiteMap().get("http://www.google.com") > 0);
 
-        testEnv.close();
+        // dont close testEnv!
+//        testEnv.close();
     }
 
     @Test
@@ -44,7 +45,7 @@ public class ContentLengthActivityTest {
         assertNotNull(c.getWebsiteMap());
         assertEquals(1, c.getWebsiteMap().size());
         assertTrue(c.getWebsiteMap().get("https://temporal.io/") > 0);
-
-        testEnv.close();
+        // dont close testEnv!
+//        testEnv.close();
     }
 }
