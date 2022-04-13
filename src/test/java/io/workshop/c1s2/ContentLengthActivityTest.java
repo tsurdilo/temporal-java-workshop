@@ -1,6 +1,7 @@
 package io.workshop.c1s2;
 
 import io.temporal.testing.TestActivityEnvironment;
+import io.temporal.testing.TestEnvironmentOptions;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +13,11 @@ public class ContentLengthActivityTest {
 
     @Before
     public void setUp() {
-        testEnv = TestActivityEnvironment.newInstance();
+        testEnv = TestActivityEnvironment.newInstance(
+                TestEnvironmentOptions.newBuilder()
+                        .setUseTimeskipping(false)
+                        .build()
+        );
     }
 
     @Test
@@ -25,6 +30,8 @@ public class ContentLengthActivityTest {
         assertNotNull(c.getWebsiteMap());
         assertEquals(1, c.getWebsiteMap().size());
         assertTrue(c.getWebsiteMap().get("http://www.google.com") > 0);
+
+        testEnv.close();
     }
 
     @Test
@@ -37,5 +44,7 @@ public class ContentLengthActivityTest {
         assertNotNull(c.getWebsiteMap());
         assertEquals(1, c.getWebsiteMap().size());
         assertTrue(c.getWebsiteMap().get("https://temporal.io/") > 0);
+
+        testEnv.close();
     }
 }
