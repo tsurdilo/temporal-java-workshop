@@ -1,9 +1,13 @@
 package io.workshop.c1s1;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.JsonFormat;
+import io.grpc.StatusRuntimeException;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.enums.v1.ArchivalState;
+import io.temporal.api.filter.v1.StartTimeFilter;
+import io.temporal.api.filter.v1.WorkflowTypeFilter;
 import io.temporal.api.history.v1.HistoryEvent;
 import io.temporal.api.namespace.v1.NamespaceConfig;
 import io.temporal.api.workflow.v1.PendingActivityInfo;
@@ -158,6 +162,26 @@ public class S1WFUtils {
             return getLastHistoryEvent(wfExec, response.getNextPageToken());
         } else {
             return lastHistoryEvent;
+        }
+    }
+
+    private static void listOpenWorkflowsByStartTime(long seconds) {
+        ListOpenWorkflowExecutionsRequest req = ListOpenWorkflowExecutionsRequest
+                .newBuilder()
+                .setTypeFilter(WorkflowTypeFilter.newBuilder().build())
+                .setStartTimeFilter(StartTimeFilter.newBuilder()
+                        .setEarliestTime(Timestamp.newBuilder()
+                                .setSeconds(seconds)
+                                .build())
+                        .build())
+                .setNamespace(client.getOptions().getNamespace())
+                .build();
+
+        ListOpenWorkflowExecutionsResponse res =
+                service.blockingStub().listOpenWorkflowExecutions(req);
+        for(WorkflowExecutionInfo info : res.getExecutionsList()) {
+            System.out.println("******* INFO: " + info.getExecution().getWorkflowId() + " - " +
+                    info.getStartTime().getSeconds());
         }
     }
 
@@ -360,14 +384,22 @@ public class S1WFUtils {
     }
 
     public static void main(String[] args) {
-        printCronSchedulesFor("NEWc3s5Workflow2");
+
+        listOpenWorkflowsByStartTime(1649807246);
+//        printCronSchedulesFor("NEWc3s5Workflow2");
 //        getWorkflowExecutionHistoryAsJson("c1GreetingWorkflow", "87411ad0-5247-454a-91f5-ac182e037f19");
         //printArchivedWorkflowExecutions("ExecutionStatus=2");
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
         //resetWorkflow(client, "8bb671cf-b900-4253-b824-5f9ab2ce5946", "871d4771-6135-412a-8a93-b20c6da397db", 8);
 //        getActivitiesWithRetriesOver(2);
-//        getWorkflowStatus(client, "055db52b-b7b6-3108-8c04-d5a36f668df6");
+//        try {
+//            getWorkflowStatus(client, "055db52b-b7b6-3108-8c04-d5a36f668df6");
+//        } catch (Exception e) {
+//            System.out.println("****** E: " + e.getClass().getName());
+//            System.out.println(((StatusRuntimeException) e).getStatus().getDescription()
+//            );
+//        }
         //printWorkflowExecutionHistory(client, "HelloPeriodicWorkflow", "6c989861-deca-47e7-bfdf-05970b810355", null, null);
 
 //        printFailedWorkflowsWithReason(null);
