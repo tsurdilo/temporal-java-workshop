@@ -12,20 +12,20 @@ public class C3S5WorkflowImpl implements C3S5Workflow {
 
     @Override
     public int exec(int count) {
-       this.count = count;
+        this.count = count;
 
-       Workflow.await(Duration.ofSeconds(2), () -> exit == true);
+        Workflow.await(Duration.ofSeconds(2), () -> exit == true);
 
-       if(!exit) {
-           logger.info("********* CONTINUING AS NEW AT COUNT: " + this.count);
-           // continueAsNew via typed stub
+        if(!exit) {
+            logger.info("********* CONTINUING AS NEW AT COUNT: " + this.count);
+            // continueAsNew via typed stub
 //           C3S5Workflow continueAsNewStub = Workflow.newContinueAsNewStub(C3S5Workflow.class);
 //           continueAsNewStub.exec(this.count);
-           // you can also use Workflow.continueAsNew
-        Workflow.continueAsNew(this.count);
-       }
+            // you can also use Workflow.continueAsNew
+            Workflow.continueAsNew(this.count);
+        }
 
-       return this.count;
+        return this.count;
     }
 
     @Override

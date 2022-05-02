@@ -305,6 +305,7 @@ public class ClientFunctions {
                 .setTaskQueueType(TaskQueueType.TASK_QUEUE_TYPE_WORKFLOW)
                 .build();
         DescribeTaskQueueResponse res = service.blockingStub().describeTaskQueue(req);
+        int count = res.getPollersCount();
         for (PollerInfo pollerInfo : res.getPollersList()) {
             System.out.println("poller id: " + pollerInfo.getIdentity());
             System.out.println("last access: " + pollerInfo.getLastAccessTime());

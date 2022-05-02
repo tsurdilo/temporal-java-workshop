@@ -3,9 +3,17 @@ package io.workshop.c1s1;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.JsonFormat;
+import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
+import io.grpc.netty.shaded.io.netty.channel.Channel;
+import io.grpc.netty.shaded.io.netty.channel.ChannelInitializer;
+import io.grpc.netty.shaded.io.netty.channel.local.LocalChannel;
+import io.temporal.api.common.v1.Payload;
+import io.temporal.api.common.v1.Payloads;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.enums.v1.ArchivalState;
+import io.temporal.api.enums.v1.EventType;
 import io.temporal.api.filter.v1.StartTimeFilter;
 import io.temporal.api.filter.v1.WorkflowTypeFilter;
 import io.temporal.api.history.v1.HistoryEvent;
@@ -16,9 +24,17 @@ import io.temporal.api.workflowservice.v1.*;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowStub;
 import io.temporal.common.RetryOptions;
+import io.temporal.common.converter.DataConverter;
+import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.internal.common.WorkflowExecutionHistory;
 import io.temporal.serviceclient.WorkflowServiceStubs;
+import io.temporal.serviceclient.WorkflowServiceStubsOptions;
+import io.temporal.workflow.Workflow;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,7 +42,19 @@ public class S1WFUtils {
 
     // Initializes all gRPC stubs (connection, blocking, future)
     // Note: by default target set to 127.0.0.1:7233, can change via workflowServiceStubsOptions
-    public static final WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
+    private static final int MAX_INBOUND_MESSAGE_SIZE = 52_428_800;
+
+    private static final WorkflowServiceStubsOptions.ChannelInitializer channelInitializer = new WorkflowServiceStubsOptions.ChannelInitializer() {
+        public void initChannel(ManagedChannelBuilder builder) {
+            ((NettyChannelBuilder) builder).maxInboundMessageSize(MAX_INBOUND_MESSAGE_SIZE);
+        }
+    };
+
+    public static final WorkflowServiceStubs service = WorkflowServiceStubs.newInstance(
+//            WorkflowServiceStubsOptions.newBuilder()
+//                    .setChannelInitializer(channelInitializer)
+//                    .build()
+    );
 
     // Client to the Temporal service used to start and query workflows by external processes
     // Note: by default set to "default" namespace, can change via WorkfowClientOptions
@@ -45,6 +73,7 @@ public class S1WFUtils {
      * @param query
      */
     private static void listWorkflowExecutionsWithQuery(String query, ByteString token) {
+
         ListWorkflowExecutionsRequest request;
 
         if (token == null) {
@@ -124,17 +153,60 @@ public class S1WFUtils {
         }
     }
 
-    public static String getCronSchedule(WorkflowExecution wfExec) {
-        GetWorkflowExecutionHistoryRequest req = GetWorkflowExecutionHistoryRequest.newBuilder()
+
+    public static void listOpenWorkflowsWithFilters(String workflowType, Timestamp time) {
+        ListOpenWorkflowExecutionsRequest req = ListOpenWorkflowExecutionsRequest.newBuilder()
                 .setNamespace(client.getOptions().getNamespace())
-                .setExecution(wfExec)
+                .setTypeFilter(WorkflowTypeFilter.newBuilder()
+                        .setName(workflowType)
+                        .build())
+                .setStartTimeFilter(StartTimeFilter.newBuilder()
+                        .setEarliestTime(time)
+                        .build())
                 .build();
-        GetWorkflowExecutionHistoryResponse res =
-                service.blockingStub().getWorkflowExecutionHistory(req);
 
-        HistoryEvent firstEvent = res.getHistory().getEvents(0);
+        ListOpenWorkflowExecutionsResponse res = service.blockingStub().listOpenWorkflowExecutions(req);
+        List<WorkflowExecutionInfo> infoList = res.getExecutionsList();
+        for(WorkflowExecutionInfo info : infoList) {
+            System.out.println("***** info: " + info.getExecution().getWorkflowId());
+        }
+    }
 
-        return firstEvent.getWorkflowExecutionStartedEventAttributes().getCronSchedule();
+    public static String getCronSchedule(WorkflowExecution wfExec) {
+
+        DescribeWorkflowExecutionRequest req = DescribeWorkflowExecutionRequest.newBuilder()
+                .setExecution(wfExec)
+                .setNamespace(client.getOptions().getNamespace())
+                .build();
+
+        DescribeWorkflowExecutionResponse res = service.blockingStub().describeWorkflowExecution(req);
+        Timestamp ts = res.getWorkflowExecutionInfo().getExecutionTime();
+
+        String execLocalTimeAsString = Instant.ofEpochSecond( ts.getSeconds() , ts.getNanos() )
+                .atZone( ZoneId.of( "America/New_York" ) )
+                .toLocalDateTime().format(new DateTimeFormatterBuilder()
+                        .appendPattern("yyyy-MM-dd hh:mm:ss")
+                .toFormatter());
+
+        System.out.println("************ exec: " + execLocalTimeAsString);
+
+//        GetWorkflowExecutionHistoryRequest req = GetWorkflowExecutionHistoryRequest.newBuilder()
+//                .setNamespace(client.getOptions().getNamespace())
+//                .setExecution(wfExec)
+//                .build();
+//        GetWorkflowExecutionHistoryResponse res =
+//                service.blockingStub().getWorkflowExecutionHistory(req);
+//
+//        for(HistoryEvent he : res.getHistory().getEventsList()) {
+//            if(he.getEventType().equals(EventType.EVENT_TYPE_WORKFLOW_TASK_STARTED)) {
+//                System.out.println("***************** GOT IT: " + he.getEventId());
+//            }
+//        }
+//
+//        HistoryEvent firstEvent = res.getHistory().getEvents(0);
+//
+//        return firstEvent.getWorkflowExecutionStartedEventAttributes().getCronSchedule();
+        return "";
     }
 
     public static HistoryEvent getLastHistoryEvent(WorkflowExecution wfExec, ByteString token) {
@@ -202,12 +274,36 @@ public class S1WFUtils {
             DescribeWorkflowExecutionResponse describeWorkflowExecutionResponse =
                     service.blockingStub().describeWorkflowExecution(describeWorkflowExecutionRequest);
             for (PendingActivityInfo activityInfo : describeWorkflowExecutionResponse.getPendingActivitiesList()) {
-                if (activityInfo.getAttempt() > retryCount) {
+//                if (activityInfo.getAttempt() > retryCount) {
                     System.out.println("Activity Type: " + activityInfo.getActivityType());
                     System.out.println("Activity attempt: " + activityInfo.getAttempt());
                     System.out.println("Last failure message : " + activityInfo.getLastFailure().getMessage());
+                    Payloads details = activityInfo.getLastFailure().getApplicationFailureInfo().getDetails();
+                    for(Payload detailsPayload : details.getPayloadsList()) {
+                        System.out.println("Detail: " + DataConverter.getDefaultInstance().fromPayload(detailsPayload, String.class, String.class));
+                    }
                     // ...
-                }
+//                }
+            }
+        }
+    }
+
+    private static void getPendingActivitiesLastFailureMessageDetails(WorkflowExecution exec) {
+        DescribeWorkflowExecutionRequest req =
+                DescribeWorkflowExecutionRequest.newBuilder()
+                        .setNamespace(client.getOptions().getNamespace())
+                        .setExecution(exec).build();
+        DescribeWorkflowExecutionResponse res =
+                service.blockingStub().describeWorkflowExecution(req);
+        for (PendingActivityInfo activityInfo : res.getPendingActivitiesList()) {
+            System.out.println("Activity Type: " + activityInfo.getActivityType());
+            System.out.println("Activity attempt: " + activityInfo.getAttempt());
+            System.out.println("Last failure message : " + activityInfo.getLastFailure().getMessage());
+            Payloads details = activityInfo.getLastFailure().getApplicationFailureInfo().getDetails();
+            for(Payload detailsPayload : details.getPayloadsList()) {
+                // you will need to know the details type here
+                System.out.println("Detail: " + DataConverter.getDefaultInstance().fromPayload(detailsPayload,
+                        String.class, String.class));
             }
         }
     }
@@ -384,15 +480,27 @@ public class S1WFUtils {
     }
 
     public static void main(String[] args) {
+//
+//        listOpenWorkflowsWithFilters("CronWorkflow", Timestamp.newBuilder()
+//                .setSeconds(1650313912)
+//                .build());
 
-        listOpenWorkflowsByStartTime(1649807246);
+//        getCronSchedule(WorkflowExecution.newBuilder()
+//                .setWorkflowId("HelloCronWorkflow")
+//                .setRunId("1f5769d1-9bc7-4e6e-be7e-0c151b049bc1")
+//                .build());
+
+//        listOpenWorkflowsByStartTime(1649807246);
 //        printCronSchedulesFor("NEWc3s5Workflow2");
 //        getWorkflowExecutionHistoryAsJson("c1GreetingWorkflow", "87411ad0-5247-454a-91f5-ac182e037f19");
         //printArchivedWorkflowExecutions("ExecutionStatus=2");
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
-        //resetWorkflow(client, "8bb671cf-b900-4253-b824-5f9ab2ce5946", "871d4771-6135-412a-8a93-b20c6da397db", 8);
+//        resetWorkflow(client, "greetingWorkflow-4", "c7442c88-ab57-4107-8291-74416b6edc1d", 4);
 //        getActivitiesWithRetriesOver(2);
+        getPendingActivitiesLastFailureMessageDetails(WorkflowExecution.newBuilder()
+                .setWorkflowId("HelloActivityWorkflow")
+                .build());
 //        try {
 //            getWorkflowStatus(client, "055db52b-b7b6-3108-8c04-d5a36f668df6");
 //        } catch (Exception e) {
