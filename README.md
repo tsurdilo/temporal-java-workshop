@@ -48,7 +48,7 @@
 * [Section 5 -ContinueAsNew and signals](src/main/java/io/workshop/CHAPTER3.md#Section-5)
 
 
-### 3. [TBD TBD TBD ](src/main/java/io/workshop/CHAPTER4.md)
+### 4. [TBD TBD TBD ](src/main/java/io/workshop/CHAPTER4.md)
 
 * [TBD](src/main/java/io/workshop/CHAPTER4.md#Section-1)
 
