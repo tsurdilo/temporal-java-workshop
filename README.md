@@ -38,7 +38,7 @@
 ### 3. [Workflow, Activity Types, ContinueAsNew, Client error handling and more](src/main/java/io/workshop/CHAPTER3.md)
 
 <p align="center">
- <a href="https://www.youtube.com/watch?v=8DFox0fGjzI"><img src="media/workshop-2-video.png" width="50%"/></a>
+ <a href="https://www.youtube.com/watch?v=8DFox0fGjzI"><img src="media/workshop-3-video.png" width="50%"/></a>
 </p>
 
 * [Section 1 - Types](src/main/java/io/workshop/CHAPTER3.md#Section-1)
