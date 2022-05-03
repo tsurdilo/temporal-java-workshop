@@ -38,6 +38,8 @@ Shows how to handle TimeoutFailure when running multiple activities in parallel
 2. Recovery / Fallback
 SAGA can be used to undo/recover **Successfull** previous actions.
    But how to recover / fallback from failed activities?
+   Answer use error handling and do what you need
+   For sample we use a generic method that could be useful
 
 * Code in package [c4s7](c4s7)
    
@@ -45,7 +47,7 @@ SAGA can be used to undo/recover **Successfull** previous actions.
 2. Scale out - "Should I create workflow per user account. We have half a million accounts currently"
 Yes it's ok to create workflow per X. Temporal was tested 
    to hundreds of millions open workfows. 
-
+   
 3. Updating initial workflow data input
 Depends on use case. In some cases you can use signal to update workflow state.
    You can also use reset feature to roll back workflow to some previous point of execution

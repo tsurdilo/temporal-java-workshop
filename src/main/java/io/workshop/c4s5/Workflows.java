@@ -111,8 +111,6 @@ public class Workflows {
                 // use when showing runtime->npe
 //                RuntimeException re = (RuntimeException) applicationFailure.getCause();
 //                System.out.println("****** RuntimeException: " + re.getMessage()); // inner
-
-
                 throw e;
             }
         }
