@@ -1,23 +1,25 @@
 package io.workshop.c4s3;
 
 import io.temporal.client.WorkflowClient;
+import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
-import io.workshop.c4s2.C4S2ActivitiesImpl;
+import io.temporal.worker.WorkerFactoryOptions;
 import io.workshop.c4s2.C4S2WorkflowImpl;
 
 public class Starter {
-    // Initializes all gRPC stubs (connection, blocking, future)
-    // Note: by default target set to 127.0.0.1:7233, can change via workflowServiceStubsOptions
     public static final WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
 
-    // Client to the Temporal service used to start and query workflows by external processes
-    // Note: by default set to "default" namespace, can change via WorkfowClientOptions
+    // TODO - show how to disabl client side signal calls
+//    public static final WorkflowClientOptions options = WorkflowClientOptions.newBuilder()
+//            .setInterceptors(new MyWorkflowClientInterceptor())
+//            .build();
+//    public static final WorkflowClient client = WorkflowClient.newInstance(service, options);
     public static final WorkflowClient client = WorkflowClient.newInstance(service);
 
-    // task queue (server "end-point") that worker(s) listen to
     public static final String taskQueue = "c4s3TaskQueue";
 
     private static final String workflowId1 = "c4s3WorkflowOne";
@@ -48,10 +50,22 @@ public class Starter {
 
         WorkflowClient.start(workflowOne::exec);
 
+        for(int i = 0; i < 10; i++) {
+            workflowTwo.setData("from client!");
+        }
+
     }
 
     private static void createWorker() {
+        // TODO - show how to disable external workflow stub signals
+//        WorkerFactoryOptions wfo =
+//                WorkerFactoryOptions.newBuilder()
+//                        .setWorkerInterceptors(new MyWorkerInterceptor())
+//                        .validateAndBuildWithDefaults();
+//        WorkerFactory workerFactory = WorkerFactory.newInstance(client, wfo);
+
         WorkerFactory workerFactory = WorkerFactory.newInstance(client);
+        // Show with factory options
         Worker worker = workerFactory.newWorker(taskQueue);
 
         worker.registerWorkflowImplementationTypes(WorkflowOneImpl.class, WorkflowTwoImpl.class);

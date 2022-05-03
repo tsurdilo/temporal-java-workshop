@@ -62,19 +62,16 @@ public class MainWorkflowImpl implements MainWorkflow {
 
         try {
             Promise.allOf(childPromiseList).get();
-            for (Promise<Void> promise : childPromiseList) {
-                if(promise.getFailure() != null) {
-                    System.out.println("***** here!!");
-                }
-            }
-
         } catch (ChildWorkflowFailure e) {
             // cause is TimeoutFailure
             for (Promise<Void> promise : childPromiseList) {
                 if(promise.getFailure() != null) {
-                    // ...
+                    System.out.println("**** Promise failure: " + promise.getFailure().getMessage());
                 } else {
+                    // isCompleted returns true if completed. not needed really in this case
+                    // because we are waiting on all promised with allOf, just for example
                     if(promise.isCompleted()) {
+                        System.out.println("abc");
                         result += promise.get();
                     }
                 }

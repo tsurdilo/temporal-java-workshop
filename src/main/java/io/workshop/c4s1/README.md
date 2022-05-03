@@ -1,1 +1,1 @@
-## Parallel child wf execution with error handling
+## Parallel child workflow executions with error handling

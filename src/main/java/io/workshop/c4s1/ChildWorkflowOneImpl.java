@@ -7,7 +7,7 @@ import java.time.Duration;
 public class ChildWorkflowOneImpl implements ChildWorkflowOne {
     @Override
     public String execChildOne(String input) {
-        Workflow.sleep(Duration.ofSeconds(3));
+        Workflow.sleep(Duration.ofSeconds(9));
         return "cOne: " + input;
     }
 }
