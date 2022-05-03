@@ -20,9 +20,9 @@ Shows how to handle TimeoutFailure when running multiple activities in parallel
 
 * Code in package [c4s3](c4s3)
 
-## Cron timezone
+## Cron - setting timezone
 
-* Code in package [c4s4](c4s5)
+* Code in package [c4s4](c4s4)
 
 # Section 2
 
