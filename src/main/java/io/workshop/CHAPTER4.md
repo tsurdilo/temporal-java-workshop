@@ -7,7 +7,7 @@
 # Section 1
 
 ## Parallel activity invocation - error handling
-Shows how to handle TimeoutFailure when running multiple activities in parallel
+Shows how to handle TimeoutFailure when running multiple child workflows in parallel
 
 * Code in package [c4s1](c4s1)
 
@@ -42,15 +42,46 @@ SAGA can be used to undo/recover **Successfull** previous actions.
    For sample we use a generic method that could be useful
 
 * Code in package [c4s7](c4s7)
-   
 
-2. Scale out - "Should I create workflow per user account. We have half a million accounts currently"
-Yes it's ok to create workflow per X. Temporal was tested 
-   to hundreds of millions open workfows. 
-   
-3. Updating initial workflow data input
-Depends on use case. In some cases you can use signal to update workflow state.
-   You can also use reset feature to roll back workflow to some previous point of execution
+3. Executing one workflow at a time - pipeline / rate limit workflow executions
+   "I want to start X number of workflows but run them one at a time."
+
+
+Rate limiting:
+* Frontend service (client and workflow calls)
+dynamic config -  frontend.namespaceRPS (default 2400)
+
+        frontend.namespacerps:
+         - value: 1000
+         - value: 500
+            constraints:
+            namespace: "NameSpaceA"
+         - value: 600
+            constraints:
+            namespace: "NameSpaceB"
+
+many more :) 
+
+
+* SDK WorkerOptions
+
+   * maxWorkerActivitiesPerSecond (worker specific)
+       * Maximum number of activities started per second by this worker. Default is 0 which means unlimited.
+   * maxConcurrentActivityExecutionSize
+       * Number of simultaneous poll requests on activity task queue. Worker-specific limit on parallel activities.
+   * maxTaskQueueActivitiesPerSecond 
+       * This is managed by the server and controls activities per second for the entire task queue across all the workers (global across all workers)
     
-4. Executing one workflow at a time - pipeline / rate limit workflow executions
-"I want to start X number of workflows but run them one at a time."
+* We cannot rate limit concurrent workflow executions
+Pattern:
+  Have one running workflow, send signals to workflow for all workflows you want to create
+  Have workflow handle signals one by one, run needed logic, or have workflow start up a chil workflow for each signal handled. 
+  If child workflow then parent can be reusable workflow that can start childs for different types
+  This workflow will have to call continueAsNew after X number of child workflow executions
+
+* Code in package [c4s8](c4s8)
+
+3. Busy loop with wait - anti-pattern
+
+* Code in package [c4s9](c4s9)
+
