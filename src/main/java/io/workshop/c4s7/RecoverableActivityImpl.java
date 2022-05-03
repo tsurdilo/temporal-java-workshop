@@ -11,6 +11,6 @@ public class RecoverableActivityImpl implements MyRecoverableActivity {
 
     @Override
     public String exec(String input) {
-        throw new NullPointerException("simulated...");
+        throw new NullPointerException("simulated..."); 
     }
 }
