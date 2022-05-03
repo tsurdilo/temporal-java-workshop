@@ -17,7 +17,8 @@ public class Activities {
             // 2. show runtime exception with npe as cause
 //            throw new RuntimeException("outer", new NullPointerException("inner"));
             // 3. show runtime exception with runtime exception as cause
-//            throw new RuntimeException("outer", new RuntimeException("inner"));
+//            throw new RuntimeException("outer", new IllegalArgumentException("inner"));
+
         }
     }
 }

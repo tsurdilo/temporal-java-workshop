@@ -32,7 +32,6 @@ public class Starter {
             // wrapped ChildWorkflowFailures, last has ActivityFailure as Cause which has applicationfailure as cause
             ApplicationFailure failure = (ApplicationFailure) e.getCause().getCause().getCause().getCause().getCause();
             System.out.println("**** CLIENT FAILURE: " + failure.getType());
-//            System.out.println("*** CE: " + e.getClass().getName());
         }
     }
 

@@ -26,7 +26,7 @@ Shows how to handle TimeoutFailure when running multiple activities in parallel
 
 ## More error handling fun
 
-* Code in package [c4s4](c4s4)
+* Code in package [c4s5](c4s5)
 
 # Section 2
 
@@ -34,6 +34,13 @@ Shows how to handle TimeoutFailure when running multiple activities in parallel
 
 1. Polling 
 * Code in package [c4s5](c4s6)
+
+2. Recovery / Fallback
+SAGA can be used to undo/recover **Successfull** previous actions.
+   But how to recover / fallback from failed activities?
+
+* Code in package [c4s7](c4s7)
+   
 
 2. Scale out - "Should I create workflow per user account. We have half a million accounts currently"
 Yes it's ok to create workflow per X. Temporal was tested 
