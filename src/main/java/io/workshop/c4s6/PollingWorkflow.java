@@ -17,26 +17,13 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5.infrequent;
+package io.workshop.c4s6;
 
-import io.temporal.activity.Activity;
-import io.workshop.c4s5.PollingActivities;
-import io.workshop.c4s5.TestService;
+import io.temporal.workflow.WorkflowInterface;
+import io.temporal.workflow.WorkflowMethod;
 
-public class InfrequentPollingActivityImpl implements PollingActivities {
-  private TestService service;
-
-  public InfrequentPollingActivityImpl(TestService service) {
-    this.service = service;
-  }
-
-  @Override
-  public String doPoll() {
-    try {
-      return service.getServiceResult();
-    } catch (TestService.TestServiceException e) {
-      // We want to rethrow the service exception so we can poll via activity retries
-      throw Activity.wrap(e);
-    }
-  }
+@WorkflowInterface
+public interface PollingWorkflow {
+  @WorkflowMethod
+  String exec();
 }

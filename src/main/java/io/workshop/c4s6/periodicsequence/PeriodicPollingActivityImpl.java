@@ -17,24 +17,27 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5.periodicsequence;
+package io.workshop.c4s6.periodicsequence;
 
-import io.temporal.workflow.ChildWorkflowOptions;
-import io.temporal.workflow.Workflow;
-import io.workshop.c4s5.PollingWorkflow;
+import io.temporal.activity.Activity;
+import io.workshop.c4s6.PollingActivities;
+import io.workshop.c4s6.TestService;
 
-public class PeriodicPollingWorkflowImpl implements PollingWorkflow {
+public class PeriodicPollingActivityImpl implements PollingActivities {
 
-  // Set some periodic poll interval, for sample we set 5 seconds
-  private int pollingIntervalInSeconds = 5;
+  private TestService service;
+
+  public PeriodicPollingActivityImpl(TestService service) {
+    this.service = service;
+  }
 
   @Override
-  public String exec() {
-    PollingChildWorkflow childWorkflow =
-        Workflow.newChildWorkflowStub(
-            PollingChildWorkflow.class,
-            ChildWorkflowOptions.newBuilder().setWorkflowId("ChildWorkflowPoll").build());
-
-    return childWorkflow.exec(pollingIntervalInSeconds);
+  public String doPoll() {
+    try {
+      return service.getServiceResult();
+    } catch (TestService.TestServiceException e) {
+      // We want to rethrow the service exception so we can poll via activity retries
+      throw Activity.wrap(e);
+    }
   }
 }

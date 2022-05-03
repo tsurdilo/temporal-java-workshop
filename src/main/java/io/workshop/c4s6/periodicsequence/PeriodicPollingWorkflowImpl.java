@@ -17,13 +17,24 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5;
+package io.workshop.c4s6.periodicsequence;
 
-import io.temporal.workflow.WorkflowInterface;
-import io.temporal.workflow.WorkflowMethod;
+import io.temporal.workflow.ChildWorkflowOptions;
+import io.temporal.workflow.Workflow;
+import io.workshop.c4s6.PollingWorkflow;
 
-@WorkflowInterface
-public interface PollingWorkflow {
-  @WorkflowMethod
-  String exec();
+public class PeriodicPollingWorkflowImpl implements PollingWorkflow {
+
+  // Set some periodic poll interval, for sample we set 5 seconds
+  private int pollingIntervalInSeconds = 5;
+
+  @Override
+  public String exec() {
+    PollingChildWorkflow childWorkflow =
+        Workflow.newChildWorkflowStub(
+            PollingChildWorkflow.class,
+            ChildWorkflowOptions.newBuilder().setWorkflowId("ChildWorkflowPoll").build());
+
+    return childWorkflow.exec(pollingIntervalInSeconds);
+  }
 }

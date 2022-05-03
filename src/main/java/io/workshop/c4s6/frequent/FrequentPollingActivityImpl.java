@@ -17,13 +17,13 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5.frequent;
+package io.workshop.c4s6.frequent;
 
 import io.temporal.activity.Activity;
 import io.temporal.activity.ActivityExecutionContext;
 import io.temporal.client.ActivityCompletionException;
-import io.workshop.c4s5.PollingActivities;
-import io.workshop.c4s5.TestService;
+import io.workshop.c4s6.PollingActivities;
+import io.workshop.c4s6.TestService;
 
 public class FrequentPollingActivityImpl implements PollingActivities {
 

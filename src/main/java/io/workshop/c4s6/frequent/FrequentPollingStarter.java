@@ -17,21 +17,21 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5.periodicsequence;
+package io.workshop.c4s6.frequent;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
-import io.workshop.c4s5.PollingWorkflow;
-import io.workshop.c4s5.TestService;
+import io.workshop.c4s6.PollingWorkflow;
+import io.workshop.c4s6.TestService;
 
-public class PeriodicPollingStarter {
+public class FrequentPollingStarter {
   private static final WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
   private static final WorkflowClient client = WorkflowClient.newInstance(service);
   private static final String taskQueue = "pollingSampleQueue";
-  private static final String workflowId = "PeriodicPollingSampleWorkflow";
+  private static final String workflowId = "FrequentPollingSampleWorkflow";
 
   public static void main(String[] args) {
     // Create our worker and register workflow and activities
@@ -52,9 +52,8 @@ public class PeriodicPollingStarter {
     Worker worker = workerFactory.newWorker(taskQueue);
 
     // Register workflow and activities
-    worker.registerWorkflowImplementationTypes(
-        PeriodicPollingWorkflowImpl.class, PeriodicPollingChildWorkflowImpl.class);
-    worker.registerActivitiesImplementations(new PeriodicPollingActivityImpl(new TestService(50)));
+    worker.registerWorkflowImplementationTypes(FrequentPollingWorkflowImpl.class);
+    worker.registerActivitiesImplementations(new FrequentPollingActivityImpl(new TestService()));
 
     workerFactory.start();
   }

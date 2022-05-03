@@ -17,12 +17,12 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5.periodicsequence;
+package io.workshop.c4s6.periodicsequence;
 
 import io.temporal.activity.ActivityOptions;
 import io.temporal.failure.ActivityFailure;
 import io.temporal.workflow.Workflow;
-import io.workshop.c4s5.PollingActivities;
+import io.workshop.c4s6.PollingActivities;
 
 import java.time.Duration;
 

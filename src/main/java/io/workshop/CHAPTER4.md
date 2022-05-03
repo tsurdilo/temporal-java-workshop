@@ -24,10 +24,24 @@ Shows how to handle TimeoutFailure when running multiple activities in parallel
 
 * Code in package [c4s4](c4s4)
 
+## More error handling fun
+
+* Code in package [c4s4](c4s4)
+
 # Section 2
 
 ## Patterns
 
-1. Polling
+1. Polling 
+* Code in package [c4s5](c4s6)
 
-* Code in package [c4s5](c4s5)
+2. Scale out - "Should I create workflow per user account. We have half a million accounts currently"
+Yes it's ok to create workflow per X. Temporal was tested 
+   to hundreds of millions open workfows. 
+
+3. Updating initial workflow data input
+Depends on use case. In some cases you can use signal to update workflow state.
+   You can also use reset feature to roll back workflow to some previous point of execution
+    
+4. Executing one workflow at a time - pipeline / rate limit workflow executions
+"I want to start X number of workflows but run them one at a time."

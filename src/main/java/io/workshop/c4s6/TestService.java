@@ -17,7 +17,7 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5;
+package io.workshop.c4s6;
 
 /**
  * Test service that we want to poll. It simulates a service being down and then returning a result

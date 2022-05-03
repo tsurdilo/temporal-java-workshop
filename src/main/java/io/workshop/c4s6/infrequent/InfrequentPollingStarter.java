@@ -17,21 +17,21 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5.frequent;
+package io.workshop.c4s6.infrequent;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
-import io.workshop.c4s5.PollingWorkflow;
-import io.workshop.c4s5.TestService;
+import io.workshop.c4s6.PollingWorkflow;
+import io.workshop.c4s6.TestService;
 
-public class FrequentPollingStarter {
+public class InfrequentPollingStarter {
   private static final WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
   private static final WorkflowClient client = WorkflowClient.newInstance(service);
   private static final String taskQueue = "pollingSampleQueue";
-  private static final String workflowId = "FrequentPollingSampleWorkflow";
+  private static final String workflowId = "InfrequentPollingSampleWorkflow";
 
   public static void main(String[] args) {
     // Create our worker and register workflow and activities
@@ -52,8 +52,8 @@ public class FrequentPollingStarter {
     Worker worker = workerFactory.newWorker(taskQueue);
 
     // Register workflow and activities
-    worker.registerWorkflowImplementationTypes(FrequentPollingWorkflowImpl.class);
-    worker.registerActivitiesImplementations(new FrequentPollingActivityImpl(new TestService()));
+    worker.registerWorkflowImplementationTypes(InfrequentPollingWorkflowImpl.class);
+    worker.registerActivitiesImplementations(new InfrequentPollingActivityImpl(new TestService(2)));
 
     workerFactory.start();
   }

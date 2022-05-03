@@ -17,36 +17,30 @@
  *  permissions and limitations under the License.
  */
 
-package io.workshop.c4s5.infrequent;
+package io.workshop.c4s6.frequent;
 
 import io.temporal.activity.ActivityOptions;
-import io.temporal.common.RetryOptions;
 import io.temporal.workflow.Workflow;
-import io.workshop.c4s5.PollingActivities;
-import io.workshop.c4s5.PollingWorkflow;
+import io.workshop.c4s6.PollingActivities;
+import io.workshop.c4s6.PollingWorkflow;
 
 import java.time.Duration;
 
-public class InfrequentPollingWorkflowImpl implements PollingWorkflow {
+public class FrequentPollingWorkflowImpl implements PollingWorkflow {
   @Override
   public String exec() {
     /**
-     * Infrequent polling via activity can be implemented via activity retries. For this sample we
-     * want to poll the test service every 60 seconds. Here we: 1. Set RetryPolicy backoff
-     * coefficient of 1 2. Set initial interval to the poll frequency (since coefficient is 1, same
-     * interval will be used for all retries) With this in case our test service is "down" we can
-     * fail our activity and it will be retried based on our 60 second retry interval until poll is
-     * successful and we can return a result from the activity.
+     * Frequent polling (1 second or faster) should be done inside the activity itself. Note that
+     * the activity has to heart beat on each iteration. Note that we need to set our
+     * HeartbeatTimeout in ActivityOptions shorter than the StartToClose timeout. You can use an
+     * appropriate activity retry policy for your activity.
      */
     ActivityOptions options =
         ActivityOptions.newBuilder()
             // Set activity StartToClose timeout (single activity exec), does not include retries
-            .setStartToCloseTimeout(Duration.ofSeconds(2))
-            .setRetryOptions(
-                RetryOptions.newBuilder()
-                    .setBackoffCoefficient(1)
-                    .setInitialInterval(Duration.ofSeconds(60))
-                    .build())
+            .setStartToCloseTimeout(Duration.ofSeconds(10))
+            .setHeartbeatTimeout(Duration.ofSeconds(2))
+            // For sample we just use the default retry policy (do not set explicitly)
             .build();
     // create our activities stub and start activity execution
     PollingActivities activities = Workflow.newActivityStub(PollingActivities.class, options);
