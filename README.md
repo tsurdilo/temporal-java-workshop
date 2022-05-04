@@ -51,7 +51,7 @@
 
 * [Section 1 - More "how tos" and "gotchas"](src/main/java/io/workshop/CHAPTER4.md#Section-1)
   * Parallel activity exec - error handling
-  * Don't use native Java Thread in wf code and why
+  * Don't use native Java Thread in wf code and why ([workflow constraints](https://docs.temporal.io/docs/java/workflows#workflow-implementation-constraints))
   * Disable signals? Why would you want to?
   * Cron timezone
   * More error handling fun
@@ -68,6 +68,7 @@
     * Grafana SDK dashboard
   * Enabling SDK metrics (Worker, "Starter")
   * Showing dashboard
+  * [Worker tuning guide](https://docs.temporal.io/docs/operation/how-to-tune-workers/)
     
 ## 5. Things planned for future Workshops
 * Let us know what you would like to have covered (open issue in this repo or ping us on slack!)
