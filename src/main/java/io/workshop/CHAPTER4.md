@@ -12,7 +12,8 @@ Shows how to handle TimeoutFailure when running multiple child workflows in para
 * Code in package [c4s1](c4s1)
 
 ## Manipulate threads inside workflow code (big "no-no") - PotentialDeadlockException
-Shows how to handle TimeoutFailure when running multiple activities in parallel
+Shows how Thread.slee in workflow code can lead to PotentialDeadlockException
+How to handle it?
 
 * Code in package [c4s2](c4s2)
 

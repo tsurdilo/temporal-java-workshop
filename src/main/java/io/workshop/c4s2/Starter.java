@@ -4,6 +4,7 @@ import io.grpc.netty.shaded.io.netty.util.Timeout;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
 import io.temporal.failure.TimeoutFailure;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
@@ -39,15 +40,19 @@ public class Starter {
                 .setMemo(Collections.singletonMap("mymemo", "mymemovalue"))
                 .build());
 
+        WorkflowClient.start(workflow::exec);
+        sleep(3);
+        // try to cancel
+        WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
+        System.out.println("** CLIENT CANCELING!!!");
+        untyped.cancel();
         try {
-            workflow.exec();
+            untyped.getResult(Void.class);
         } catch (WorkflowFailedException e) {
             // wf timed out - TimeoutFailure
             TimeoutFailure timeoutFailure = (TimeoutFailure) e.getCause();
             System.out.println("Timeout: " + timeoutFailure.getTimeoutType().name());
         }
-
-        System.exit(1);
     }
 
     private static void createWorker() {
@@ -56,5 +61,13 @@ public class Starter {
         worker.registerWorkflowImplementationTypes(C4S2WorkflowImpl.class);
 
         workerFactory.start();
+    }
+
+    private static void sleep(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
