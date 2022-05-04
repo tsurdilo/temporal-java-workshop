@@ -1,4 +1,4 @@
-# Temporal Java SDK Workshop
+# Temporal Java SDK Workshops
 
 ## Notable Temporal Links
 
