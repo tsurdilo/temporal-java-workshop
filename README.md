@@ -51,7 +51,8 @@
 ### 4. [How-tos, Patterns, SDK Metrics](src/main/java/io/workshop/CHAPTER4.md)
 
 * [Section 1 - More "how tos" and "gotchas"](src/main/java/io/workshop/CHAPTER4.md#Section-1)
-* [Patterns](src/main/java/io/workshop/CHAPTER4.md#Section-2)
+* [Section 1 - Patterns](src/main/java/io/workshop/CHAPTER4.md#Section-2)
+* [Section 3 - SDK Metrics](src/main/java/io/workshop/CHAPTER4.md#Section-3)
 
 
 ## 5. Things planned for future Workshops

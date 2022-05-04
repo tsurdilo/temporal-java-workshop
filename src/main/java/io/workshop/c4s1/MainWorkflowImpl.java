@@ -29,38 +29,12 @@ public class MainWorkflowImpl implements MainWorkflow {
         ChildWorkflowOne childOneStub = Workflow.newChildWorkflowStub(ChildWorkflowOne.class, optionsOne);
         ChildWorkflowTwo childTwoStub = Workflow.newChildWorkflowStub(ChildWorkflowTwo.class, optionsTwo);
 
-
-        Promise<Void> childOnePromise = Async.procedure(childOneStub::execChildOne, input)
-//                .exceptionally(e -> {
-//                    // exception here is going to be ChildWorkflowFailure
-//                    System.out.println("*********** CHILD1: " + e.getClass().getName());
-//                    ChildWorkflowFailure failure = (ChildWorkflowFailure) e;
-//                    System.out.println("ORIGINAL MESSAGE: " + failure.getCause().getClass().getName());
-////                    return null;
-////                    *********** CHILD2: io.temporal.failure.ChildWorkflowFailure
-////                    ORIGINAL MESSAGE: io.temporal.failure.TimeoutFailure
-//
-//                    throw Workflow.wrap((ChildWorkflowFailure) e);
-//                })
-                ;
-
-
-        Promise<Void> childTwoPromise = Async.procedure(childTwoStub::execChildTwo, input)
-//                .exceptionally(e -> {
-//                    // exception here is going to be ChildWorkflowFailure
-//                    System.out.println("*********** CHILD2: " + e.getClass().getName());
-//                    ChildWorkflowFailure failure = (ChildWorkflowFailure) e;
-//                    System.out.println("ORIGINAL MESSAGE: " + failure.getCause().getClass().getName());
-////                    return null;
-//                    throw Workflow.wrap((ChildWorkflowFailure) e);
-//                })
-                ;
-
         List<Promise<Void>> childPromiseList = new ArrayList<>();
-        childPromiseList.add(childOnePromise);
-        childPromiseList.add(childTwoPromise);
+        childPromiseList.add(Async.procedure(childOneStub::execChildOne, input));
+        childPromiseList.add(Async.procedure(childTwoStub::execChildTwo, input));
 
         try {
+            // Wait for all promises to complete
             Promise.allOf(childPromiseList).get();
         } catch (ChildWorkflowFailure e) {
             // cause is TimeoutFailure

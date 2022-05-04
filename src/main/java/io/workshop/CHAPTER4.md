@@ -2,6 +2,7 @@
 
 * [Section 1 - More "how tos" and "gotchas"](#Section-1)
 * [Section 2 - Patterns](#Section-2)
+* [Section 3 - SDK Metrics](#Section-3)
 
 
 # Section 1
@@ -46,8 +47,7 @@ SAGA can be used to undo/recover **Successfull** previous actions.
 
 3. Executing one workflow at a time - pipeline / rate limit workflow executions
    "I want to start X number of workflows but run them one at a time."
-
-
+   
 Rate limiting:
 * Frontend service (client and workflow calls)
 dynamic config -  frontend.namespaceRPS (default 2400)
@@ -85,4 +85,8 @@ Pattern:
 3. Busy loop with wait - anti-pattern
 
 * Code in package [c4s9](c4s9)
+
+# Section 3
+
+## SDK Metrics
 

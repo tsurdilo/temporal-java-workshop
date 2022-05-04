@@ -5,4 +5,5 @@
 ## 5. Talks about how clients sending signals at a very high rate can cause problems, even with continueAsNew
 
 ## Future solution
-The future solution would be using Update feature that would support rejecting an update without writing it to a history.
+The future solution would be using Update feature that would 
+support rejecting an update without writing it to a history.

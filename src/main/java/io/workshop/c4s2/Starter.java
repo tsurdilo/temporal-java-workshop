@@ -1,10 +1,9 @@
 package io.workshop.c4s2;
 
+import io.grpc.StatusRuntimeException;
 import io.grpc.netty.shaded.io.netty.util.Timeout;
-import io.temporal.client.WorkflowClient;
-import io.temporal.client.WorkflowFailedException;
-import io.temporal.client.WorkflowOptions;
-import io.temporal.client.WorkflowStub;
+import io.temporal.client.*;
+import io.temporal.failure.CanceledFailure;
 import io.temporal.failure.TimeoutFailure;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.worker.Worker;
@@ -34,24 +33,27 @@ public class Starter {
         C4S2Workflow workflow = client.newWorkflowStub(C4S2Workflow.class, WorkflowOptions.newBuilder()
                 .setWorkflowId(workflowId)
                 .setTaskQueue(taskQueue)
-                // Set to 30s so we can catch WorkflowFailedException
-                .setWorkflowRunTimeout(Duration.ofSeconds(30))
-                // Set memo :)
-                .setMemo(Collections.singletonMap("mymemo", "mymemovalue"))
+                // Set to 45s so we can catch WorkflowFailedException
+                .setWorkflowRunTimeout(Duration.ofSeconds(45))
                 .build());
-
-        WorkflowClient.start(workflow::exec);
-        sleep(3);
-        // try to cancel
-        WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
-        System.out.println("** CLIENT CANCELING!!!");
-        untyped.cancel();
         try {
-            untyped.getResult(Void.class);
-        } catch (WorkflowFailedException e) {
-            // wf timed out - TimeoutFailure
-            TimeoutFailure timeoutFailure = (TimeoutFailure) e.getCause();
-            System.out.println("Timeout: " + timeoutFailure.getTimeoutType().name());
+            WorkflowClient.start(workflow::exec);
+        } catch (WorkflowExecutionAlreadyStarted ee) {
+            System.out.println("** WorkflowExecutionAlreadyStarted Exception : " + ee.getMessage());
+        } finally {
+            try {
+                WorkflowStub untyped = WorkflowStub.fromTyped(workflow);
+                untyped.getResult(Void.class);
+                System.out.println("***** Workflow completed");
+            } catch (WorkflowFailedException e) {
+                // wf timed out - TimeoutFailure
+                if (e.getCause() instanceof TimeoutFailure) {
+                    TimeoutFailure timeoutFailure = (TimeoutFailure) e.getCause();
+                    System.out.println("** Client - Timeout: " + timeoutFailure.getTimeoutType().name());
+                }
+            } catch (RuntimeException ee) {
+                System.out.println("**** here..." + ee.getMessage());
+            }
         }
     }
 
@@ -61,13 +63,5 @@ public class Starter {
         worker.registerWorkflowImplementationTypes(C4S2WorkflowImpl.class);
 
         workerFactory.start();
-    }
-
-    private static void sleep(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
