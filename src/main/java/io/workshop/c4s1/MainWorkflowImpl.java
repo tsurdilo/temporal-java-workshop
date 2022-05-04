@@ -11,23 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainWorkflowImpl implements MainWorkflow {
-    private ChildWorkflowOptions optionsOne = ChildWorkflowOptions.newBuilder()
-            .setWorkflowId("childOne")
-            .setWorkflowRunTimeout(Duration.ofSeconds(10))
-            .build();
-
-    private ChildWorkflowOptions optionsTwo = ChildWorkflowOptions.newBuilder()
-            .setWorkflowId("childTwo")
-            .setWorkflowRunTimeout(Duration.ofSeconds(2))
-            .build();
 
     private String result = "";
 
     @Override
     public String execute(String input) {
 
-        ChildWorkflowOne childOneStub = Workflow.newChildWorkflowStub(ChildWorkflowOne.class, optionsOne);
-        ChildWorkflowTwo childTwoStub = Workflow.newChildWorkflowStub(ChildWorkflowTwo.class, optionsTwo);
+        ChildWorkflowOne childOneStub = Workflow.newChildWorkflowStub(ChildWorkflowOne.class,
+                ChildWorkflowOptions.newBuilder()
+                .setWorkflowId("childOne")
+                .setWorkflowRunTimeout(Duration.ofSeconds(10))
+                .build());
+
+        ChildWorkflowTwo childTwoStub = Workflow.newChildWorkflowStub(ChildWorkflowTwo.class,
+                ChildWorkflowOptions.newBuilder()
+                .setWorkflowId("childTwo")
+                .setWorkflowRunTimeout(Duration.ofSeconds(2))
+                .build());
 
         List<Promise<Void>> childPromiseList = new ArrayList<>();
         childPromiseList.add(Async.procedure(childOneStub::execChildOne, input));

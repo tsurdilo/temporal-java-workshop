@@ -49,6 +49,8 @@
 
 ### 4. [How-tos, Patterns, SDK Metrics](src/main/java/io/workshop/CHAPTER4.md)
 
+* Intro - Java SDK Updates / Roadmap - Dmitry
+
 * [Section 1 - More "how tos" and "gotchas"](src/main/java/io/workshop/CHAPTER4.md#Section-1)
   * Parallel activity exec - error handling
   * Don't use native Java Thread in wf code and why ([workflow constraints](https://docs.temporal.io/docs/java/workflows#workflow-implementation-constraints))
