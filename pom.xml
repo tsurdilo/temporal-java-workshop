@@ -24,6 +24,7 @@
 		<version.org.slf4j>1.7.26</version.org.slf4j>
 		<version.jsonpath>2.6.0</version.jsonpath>
 		<version.jackson>2.13.1</version.jackson>
+		<version.micrometer-registry>1.8.5</version.micrometer-registry>
 		<java.module.name>${project.name}</java.module.name>
 	</properties>
 
@@ -76,6 +77,13 @@
 			<artifactId>json-path</artifactId>
 			<version>${version.jsonpath}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${version.micrometer-registry}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>junit</groupId>

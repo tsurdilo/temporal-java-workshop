@@ -62,8 +62,8 @@
   * Pipeline (one workflow at a time)
   * Busy Loop with wait
     
-* [Section 3 - SDK Metrics](src/main/java/io/workshop/CHAPTER4.md#Section-3)
-  * Setting up (Docker Compose)
+* [Section 3 - SDK Metrics Intro](src/main/java/io/workshop/CHAPTER4.md#Section-3)
+  * Setting up ([Docker compose repo](https://github.com/tsurdilo/my-temporal-dockercompose))
     * Prometheus scrape config
     * Grafana SDK dashboard
   * Enabling SDK metrics (Worker, "Starter")
