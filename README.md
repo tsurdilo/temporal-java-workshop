@@ -47,11 +47,16 @@
 * [Section 4 - Client errors and setting up SSL/mTLS](src/main/java/io/workshop/CHAPTER3.md#Section-4)
 * [Section 5 -ContinueAsNew and signals](src/main/java/io/workshop/CHAPTER3.md#Section-5)
 
-
 ### 4. [How-tos, Patterns, SDK Metrics](src/main/java/io/workshop/CHAPTER4.md)
 
 * [Section 1 - More "how tos" and "gotchas"](src/main/java/io/workshop/CHAPTER4.md#Section-1)
-* [Section 1 - Patterns](src/main/java/io/workshop/CHAPTER4.md#Section-2)
+  * Parallel activity exec - error handling
+  * Don't use native Java Thread in wf code and why
+  * Disable signals? Why would you want to?
+  * Cron timezone
+  * More error handling fun
+
+* [Section 2 - Patterns](src/main/java/io/workshop/CHAPTER4.md#Section-2)
   * Polling
   * Recovery / Fallback
   * Pipeline (one workflow at a time)
