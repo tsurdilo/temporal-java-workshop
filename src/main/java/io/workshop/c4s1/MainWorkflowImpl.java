@@ -50,7 +50,6 @@ public class MainWorkflowImpl implements MainWorkflow {
                 }
             }
         }
-
         return result;
     }
 }

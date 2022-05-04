@@ -52,9 +52,18 @@
 
 * [Section 1 - More "how tos" and "gotchas"](src/main/java/io/workshop/CHAPTER4.md#Section-1)
 * [Section 1 - Patterns](src/main/java/io/workshop/CHAPTER4.md#Section-2)
+  * Polling
+  * Recovery / Fallback
+  * Pipeline (one workflow at a time)
+  * Busy Loop with wait
+    
 * [Section 3 - SDK Metrics](src/main/java/io/workshop/CHAPTER4.md#Section-3)
-
-
+  * Setting up (Docker Compose)
+    * Prometheus scrape config
+    * Grafana SDK dashboard
+  * Enabling SDK metrics (Worker, "Starter")
+  * Showing dashboard
+    
 ## 5. Things planned for future Workshops
 * Let us know what you would like to have covered (open issue in this repo or ping us on slack!)
 

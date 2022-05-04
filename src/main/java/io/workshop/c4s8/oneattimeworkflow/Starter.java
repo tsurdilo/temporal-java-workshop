@@ -33,6 +33,7 @@ public class Starter {
 
         // start sending signals to workflow to execute child workflows one at time
         for(int i = 0; i < 30; i++) {
+            // send signal to workflow
             workflow.toInvoke(new ToInvoke("MyChildWorkflow", "Child" + (i + 1), "Hello " + (i + 1)));
             // short sleep..remember the UnhandledCommand? Our workflow has to continueAsNew
             sleep(500);

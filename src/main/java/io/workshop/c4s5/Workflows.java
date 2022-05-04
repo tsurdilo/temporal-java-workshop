@@ -104,9 +104,9 @@ public class Workflows {
                 System.out.println("******* Application Failure Type: " + applicationFailure.getType());
                 System.out.println("******* Application Failure Message: " + applicationFailure.getOriginalMessage());
 
-                // use when showing runtime->npe
-//                NullPointerException npe = (NullPointerException) applicationFailure.getCause();
-//                System.out.println("****** NullPointerException: " + npe.getMessage()); // inner
+                // use when showing runtime->runtime
+//                RuntimeException runtimeException = (RuntimeException) applicationFailure.getCause();
+//                System.out.println("****** RuntimeException: " + runtimeException.getMessage()); // inner
 
                 // use when showing runtime->npe
 //                RuntimeException re = (RuntimeException) applicationFailure.getCause();

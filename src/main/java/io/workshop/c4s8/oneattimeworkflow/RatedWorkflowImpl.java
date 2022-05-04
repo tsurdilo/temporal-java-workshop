@@ -42,7 +42,7 @@ public class RatedWorkflowImpl implements RatedWorkflow {
             count++;
             // we have to call continueAsNew after X number of child workflow execs
             if(count == maxCalls) {
-                // irl it would be more than after 10..just for demo
+                // irl it would be more than after 8..just for demo
                 logger.info("Workflow calling ContinueAsNew");
                 Workflow.continueAsNew(this.toInvokeList);
             }

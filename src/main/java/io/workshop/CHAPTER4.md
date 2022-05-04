@@ -49,20 +49,6 @@ SAGA can be used to undo/recover **Successfull** previous actions.
    "I want to start X number of workflows but run them one at a time."
    
 Rate limiting:
-* Frontend service (client and workflow calls)
-dynamic config -  frontend.namespaceRPS (default 2400)
-
-        frontend.namespacerps:
-         - value: 1000
-         - value: 500
-            constraints:
-            namespace: "NameSpaceA"
-         - value: 600
-            constraints:
-            namespace: "NameSpaceB"
-
-many more :) 
-
 
 * SDK WorkerOptions
 
@@ -72,6 +58,8 @@ many more :)
        * Number of simultaneous poll requests on activity task queue. Worker-specific limit on parallel activities.
    * maxTaskQueueActivitiesPerSecond 
        * This is managed by the server and controls activities per second for the entire task queue across all the workers (global across all workers)
+   * maxConcurrentWorkflowTaskExecutionSize 
+    * Max concurrent workflow tasks (not workflows!) - helps to limit cpu/memory utilization by a worker
     
 * We cannot rate limit concurrent workflow executions
 Pattern:
@@ -83,6 +71,8 @@ Pattern:
 * Code in package [c4s8](c4s8)
 
 3. Busy loop with wait - anti-pattern
+   * Can grow workflow history
+   * Use workflow.await to wait for a condition inside a workflow (does not grow history)
 
 * Code in package [c4s9](c4s9)
 

@@ -25,7 +25,7 @@ public class CronStarter {
                 // 1. crontab:
 //                .setCronSchedule("5 10 * * *")
 
-                // Intervals
+                // Intervals (robfig/cron)
 //                .setCronSchedule("@every 1m")
 
                 // Time Zones
@@ -37,7 +37,7 @@ public class CronStarter {
                 .setCronSchedule("CRON_TZ=America/New_York 43 1 * * *")
 
                 // Predefined Schedules
-                .setCronSchedule("@monthly") // "Run once a month, midnight, first of month"
+//                .setCronSchedule("@monthly") // "Run once a month, midnight, first of month"
                 .build());
 
         workflow.runit();
