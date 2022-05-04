@@ -30,8 +30,13 @@ public class Starter {
             System.out.println("Result: " + workflow.run());
         } catch (WorkflowFailedException e) {
             // wrapped ChildWorkflowFailures, last has ActivityFailure as Cause which has applicationfailure as cause
-            ApplicationFailure failure = (ApplicationFailure) e.getCause().getCause().getCause().getCause().getCause();
-            System.out.println("**** CLIENT FAILURE: " + failure.getType());
+            ApplicationFailure failure = (ApplicationFailure)
+                            e.getCause() // ChildWorkflowFailure A
+                            .getCause()  // ChildWorkflowFailure B
+                            .getCause()  // ChildWorkflowFailure C
+                            .getCause()  // ActivityFailure
+                            .getCause(); // ApplicationFailure
+            System.out.println("**** CLIENT FAILURE: " + failure.getType() + " - " + failure.getOriginalMessage());
         }
     }
 

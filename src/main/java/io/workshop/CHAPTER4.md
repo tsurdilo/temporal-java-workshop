@@ -80,5 +80,6 @@ Pattern:
 
 ## SDK Metrics
 
+* [Java SDK Metrics](https://github.com/temporalio/sdk-java/blob/master/temporal-sdk/src/main/java/io/temporal/worker/MetricsType.java)
 * Code in package [c4s10](c4s10)
 
