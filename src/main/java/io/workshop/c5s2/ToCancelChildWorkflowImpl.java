@@ -40,7 +40,7 @@ public class ToCancelChildWorkflowImpl implements ToCancelChildWorkflow {
             System.out.println("In Child, activity cause: " + e.getCause().getClass().getName());
 
             // do some cleanup work if needed
-
+            System.out.println("In Child - performing some cleanup...");
             // rethrow the error
             throw e;
         }

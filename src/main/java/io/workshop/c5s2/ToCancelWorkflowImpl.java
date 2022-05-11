@@ -28,10 +28,10 @@ public class ToCancelWorkflowImpl implements ToCancelWorkflow {
         try {
             result = childPromise.get();
         } catch ( ChildWorkflowFailure e) {
-            System.out.println("In parent, received ChildWorkflowFailure");
-            System.out.println("In parent, cause: " + e.getCause().getClass().getName());
+            System.out.println("In Parent, received ChildWorkflowFailure");
+            System.out.println("In Parent, cause: " + e.getCause().getClass().getName());
             // do some cleanup work
-
+            System.out.println("In Parent - performing some cleanup...");
             // return all cancelled
            return "all cancelled";
         }

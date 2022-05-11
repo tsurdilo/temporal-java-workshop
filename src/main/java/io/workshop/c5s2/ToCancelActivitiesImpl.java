@@ -17,6 +17,7 @@ public class ToCancelActivitiesImpl implements ToCancelActivities {
             } catch (ActivityCanceledException e) {
                 System.out.println("In Activity - received cancellation request.");
                 // do some "cleanup" if needed
+                System.out.println("In Activity - performing some cleanup...");
                 // rethrow the error
                 throw e;
             }
