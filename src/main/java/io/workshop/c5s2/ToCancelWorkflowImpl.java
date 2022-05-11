@@ -12,7 +12,6 @@ public class ToCancelWorkflowImpl implements ToCancelWorkflow {
         ToCancelChildWorkflow child = Workflow.newChildWorkflowStub(ToCancelChildWorkflow.class,
                 ChildWorkflowOptions.newBuilder()
                         .setWorkflowId("ToCancelChild")
-//                        .setParentClosePolicy(ParentClosePolicy.PARENT_CLOSE_POLICY_REQUEST_CANCEL)
                         .setCancellationType(ChildWorkflowCancellationType.WAIT_CANCELLATION_COMPLETED)
                         .build());
 
