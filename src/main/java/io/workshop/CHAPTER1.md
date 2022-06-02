@@ -327,8 +327,8 @@ io.workshop.intro.GetFinalCount
 
 * Add search attributes via tctl:
 ```
-tctl admin cluster add-search-attributes --name CustomerTitle --type String
-tctl admin cluster add-search-attributes --name CustomerLanguages --type String
+tctl admin cluster add-search-attributes --name CustomerTitle --type Text
+tctl admin cluster add-search-attributes --name CustomerLanguages --type Text
 tctl admin cluster add-search-attributes --name CustomerAge --type Int
 ```
 
