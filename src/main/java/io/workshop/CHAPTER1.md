@@ -118,7 +118,7 @@ Note: for workshop samples to all run we need Elasticsearch enabled
 * [Temporal Helm Charts Repo](https://github.com/temporalio/helm-charts)
 * [Installing and Running Temporal Server on Docker Compose and Minikube Video](https://www.youtube.com/watch?v=f6N3ZcWHygU)
 
-* Look at [Web UI](http://localhost:808/)
+* Look at [Web UI](http://localhost:8088/)
 * Useful Docker commands for cleaning up **DEV** environment:
   (note stop the Temporal server before you run this :) )
 ```
