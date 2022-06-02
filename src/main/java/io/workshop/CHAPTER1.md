@@ -109,7 +109,7 @@ Gradle:
 ```
 git clone git@github.com:temporalio/docker-compose.git
 cd docker-compose
-docker-compose -f docker-compose-cas-es.yml up
+docker-compose -f docker-compose-cass-es.yml up
 ```   
 
 Note: for workshop samples to all run we need Elasticsearch enabled
