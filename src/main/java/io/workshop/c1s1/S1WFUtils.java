@@ -16,6 +16,7 @@ import io.temporal.api.enums.v1.ArchivalState;
 import io.temporal.api.enums.v1.EventType;
 import io.temporal.api.filter.v1.StartTimeFilter;
 import io.temporal.api.filter.v1.WorkflowTypeFilter;
+import io.temporal.api.history.v1.History;
 import io.temporal.api.history.v1.HistoryEvent;
 import io.temporal.api.namespace.v1.NamespaceConfig;
 import io.temporal.api.workflow.v1.PendingActivityInfo;
@@ -173,40 +174,16 @@ public class S1WFUtils {
     }
 
     public static String getCronSchedule(WorkflowExecution wfExec) {
-
-        DescribeWorkflowExecutionRequest req = DescribeWorkflowExecutionRequest.newBuilder()
-                .setExecution(wfExec)
+        GetWorkflowExecutionHistoryRequest req = GetWorkflowExecutionHistoryRequest.newBuilder()
                 .setNamespace(client.getOptions().getNamespace())
+                .setExecution(wfExec)
                 .build();
+        GetWorkflowExecutionHistoryResponse res =
+                service.blockingStub().getWorkflowExecutionHistory(req);
 
-        DescribeWorkflowExecutionResponse res = service.blockingStub().describeWorkflowExecution(req);
-        Timestamp ts = res.getWorkflowExecutionInfo().getExecutionTime();
+        HistoryEvent firstEvent = res.getHistory().getEvents(0);
 
-        String execLocalTimeAsString = Instant.ofEpochSecond( ts.getSeconds() , ts.getNanos() )
-                .atZone( ZoneId.of( "America/New_York" ) )
-                .toLocalDateTime().format(new DateTimeFormatterBuilder()
-                        .appendPattern("yyyy-MM-dd hh:mm:ss")
-                .toFormatter());
-
-        System.out.println("************ exec: " + execLocalTimeAsString);
-
-//        GetWorkflowExecutionHistoryRequest req = GetWorkflowExecutionHistoryRequest.newBuilder()
-//                .setNamespace(client.getOptions().getNamespace())
-//                .setExecution(wfExec)
-//                .build();
-//        GetWorkflowExecutionHistoryResponse res =
-//                service.blockingStub().getWorkflowExecutionHistory(req);
-//
-//        for(HistoryEvent he : res.getHistory().getEventsList()) {
-//            if(he.getEventType().equals(EventType.EVENT_TYPE_WORKFLOW_TASK_STARTED)) {
-//                System.out.println("***************** GOT IT: " + he.getEventId());
-//            }
-//        }
-//
-//        HistoryEvent firstEvent = res.getHistory().getEvents(0);
-//
-//        return firstEvent.getWorkflowExecutionStartedEventAttributes().getCronSchedule();
-        return "";
+        return firstEvent.getWorkflowExecutionStartedEventAttributes().getCronSchedule();
     }
 
     public static HistoryEvent getLastHistoryEvent(WorkflowExecution wfExec, ByteString token) {
@@ -388,6 +365,24 @@ public class S1WFUtils {
         return workflowExecutionInfo.getStatus().toString();
     }
 
+    public static long getFirstWorkflowTaskStartedEventId(String wfId, String wfRunId, String namespace) {
+        GetWorkflowExecutionHistoryRequest request =
+                GetWorkflowExecutionHistoryRequest.newBuilder()
+                        .setNamespace(namespace)
+                        .setExecution(WorkflowExecution.newBuilder()
+                                .setWorkflowId(wfId)
+                                .setRunId(wfRunId)
+                                .build()).build();
+        History history = service.blockingStub().getWorkflowExecutionHistory(request).getHistory();
+        for(HistoryEvent he : history.getEventsList()) {
+            if(he.getEventType().equals(EventType.EVENT_TYPE_WORKFLOW_TASK_STARTED)) {
+                return he.getEventId();
+            }
+        }
+        // not found
+        return -1;
+    }
+
     public static void printDescribeWorkflowExecution(WorkflowClient client, String workflowId, String runId) {
         WorkflowStub wfStub = client.newUntypedWorkflowStub(workflowId, Optional.of(runId), Optional.empty());
         DescribeWorkflowExecutionRequest request = DescribeWorkflowExecutionRequest.newBuilder()
@@ -436,7 +431,7 @@ public class S1WFUtils {
      * Reset a workflow to a specific taskFinishEventId given its workfow id and run id
      */
     public static void resetWorkflow(WorkflowClient client, String workflowId, String runId, long taskFinishEventId) {
-        WorkflowStub existingUntyped = client.newUntypedWorkflowStub(workflowId, Optional.of(runId), Optional.of("c1GreetingWorkflow"));
+        WorkflowStub existingUntyped = client.newUntypedWorkflowStub(workflowId, Optional.of(runId), Optional.of("GreetingWorkflow"));
         ResetWorkflowExecutionRequest resetWorkflowExecutionRequest =
                 ResetWorkflowExecutionRequest.newBuilder()
                         .setRequestId(UUID.randomUUID().toString())
@@ -485,10 +480,12 @@ public class S1WFUtils {
 //                .setSeconds(1650313912)
 //                .build());
 
-//        getCronSchedule(WorkflowExecution.newBuilder()
-//                .setWorkflowId("HelloCronWorkflow")
-//                .setRunId("1f5769d1-9bc7-4e6e-be7e-0c151b049bc1")
-//                .build());
+        System.out.println("Cron: " +
+        getCronSchedule(WorkflowExecution.newBuilder()
+                .setWorkflowId("HelloCronWorkflow")
+                .setRunId("ae1f0112-4aab-4d43-a4d8-c6e455caa6d4")
+                .build())
+        );
 
 //        listOpenWorkflowsByStartTime(1649807246);
 //        printCronSchedulesFor("NEWc3s5Workflow2");
@@ -496,11 +493,11 @@ public class S1WFUtils {
         //printArchivedWorkflowExecutions("ExecutionStatus=2");
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
-//        resetWorkflow(client, "greetingWorkflow-4", "c7442c88-ab57-4107-8291-74416b6edc1d", 4);
+//        resetWorkflow(client, "HelloActivityWorkflow", "67ceba35-c88a-490b-8ea1-eca6ccfa5703", 3);
 //        getActivitiesWithRetriesOver(2);
-        getPendingActivitiesLastFailureMessageDetails(WorkflowExecution.newBuilder()
-                .setWorkflowId("HelloActivityWorkflow")
-                .build());
+//        getPendingActivitiesLastFailureMessageDetails(WorkflowExecution.newBuilder()
+//                .setWorkflowId("HelloActivityWorkflow")
+//                .build());
 //        try {
 //            getWorkflowStatus(client, "055db52b-b7b6-3108-8c04-d5a36f668df6");
 //        } catch (Exception e) {
@@ -547,6 +544,10 @@ public class S1WFUtils {
 //        printWorkflowExecutionsAndShowCustomerInfo("CustomerAge > 20 AND CustomerTitle='Ms'");
 //        // Customer workflows where customer speaks Spanish
 //        printWorkflowExecutionsAndShowCustomerInfo("CustomerLanguages LIKE \"%Spanish\"");
+
+//        System.out.println(
+//        getFirstWorkflowTaskStartedEventId("hello_world_workflowID", "37c70ec6-24e8-48cf-ad8e-d034e1f4b754", "default")
+//        );
 
     }
 }
