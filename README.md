@@ -50,7 +50,7 @@
 ### 4. [How-tos, Patterns, SDK Metrics](src/main/java/io/workshop/CHAPTER4.md)
 
 <p align="center">
- <a href="https://www.youtube.com/watch?v=v-s-Umt1Q0A"><img src="media/workshop-5-video.png" width="50%"/></a>
+ <a href="https://www.youtube.com/watch?v=v-s-Umt1Q0A"><img src="media/workshop-4-video.png" width="50%"/></a>
 </p>
 
 * Intro - Java SDK Updates / Roadmap - Dmitry
