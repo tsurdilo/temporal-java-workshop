@@ -29,7 +29,7 @@ Show how child waits for activity to cancel and parent waits for child to cancel
 
 * Code in package [c5s1](c5s3)
 
-## Break workflow determinism + reset
+## Break workflow determinism + replay + reset
 
 * Code in package [c5s1](c5s4)
 

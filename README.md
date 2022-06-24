@@ -82,7 +82,7 @@
   * Bulk Request
   * Cascade wait for cancellation
   * Handle multiple distinct signals in order
-  * Break workflow determinism + reset
+  * Break workflow determinism + replay + reset
   
 * [Section 2 - Workflow Execution + History](src/main/java/io/workshop/CHAPTER5.md#Section-2)
   
