@@ -14,6 +14,7 @@ import io.temporal.api.common.v1.Payloads;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.enums.v1.ArchivalState;
 import io.temporal.api.enums.v1.EventType;
+import io.temporal.api.enums.v1.ResetReapplyType;
 import io.temporal.api.filter.v1.StartTimeFilter;
 import io.temporal.api.filter.v1.WorkflowTypeFilter;
 import io.temporal.api.history.v1.History;
@@ -155,21 +156,36 @@ public class S1WFUtils {
     }
 
 
-    public static void listOpenWorkflowsWithFilters(String workflowType, Timestamp time) {
-        ListOpenWorkflowExecutionsRequest req = ListOpenWorkflowExecutionsRequest.newBuilder()
-                .setNamespace(client.getOptions().getNamespace())
-                .setTypeFilter(WorkflowTypeFilter.newBuilder()
-                        .setName(workflowType)
-                        .build())
-                .setStartTimeFilter(StartTimeFilter.newBuilder()
-                        .setEarliestTime(time)
-                        .build())
-                .build();
+    public static void terminateWorkflows(ByteString token) {
+        ListOpenWorkflowExecutionsRequest req;
+        if(token == null) {
+            req = ListOpenWorkflowExecutionsRequest.newBuilder()
+                    .setNamespace(client.getOptions().getNamespace())
+                    // note you can set filters here too
+//                .setTypeFilter(WorkflowTypeFilter.newBuilder()
+//                        .setName(workflowType)
+//                        .build())
+//                .setStartTimeFilter(StartTimeFilter.newBuilder()
+//                        .setEarliestTime(time)
+//                        .build())
+                    .build();
+        } else {
+            req = ListOpenWorkflowExecutionsRequest.newBuilder()
+                    .setNamespace(client.getOptions().getNamespace())
+                    .setNextPageToken(token)
+                    .build();
+        }
 
         ListOpenWorkflowExecutionsResponse res = service.blockingStub().listOpenWorkflowExecutions(req);
         List<WorkflowExecutionInfo> infoList = res.getExecutionsList();
         for(WorkflowExecutionInfo info : infoList) {
-            System.out.println("***** info: " + info.getExecution().getWorkflowId());
+            WorkflowStub untyped = client.newUntypedWorkflowStub(info.getExecution().getWorkflowId(),
+                    Optional.of(info.getExecution().getRunId()), Optional.empty());
+            untyped.terminate("my reason"); //
+        }
+
+        if (res.getNextPageToken() != null && res.getNextPageToken().size() > 0) {
+            terminateWorkflows(res.getNextPageToken());
         }
     }
 
@@ -375,7 +391,7 @@ public class S1WFUtils {
                                 .build()).build();
         History history = service.blockingStub().getWorkflowExecutionHistory(request).getHistory();
         for(HistoryEvent he : history.getEventsList()) {
-            if(he.getEventType().equals(EventType.EVENT_TYPE_WORKFLOW_TASK_STARTED)) {
+            if(he.getEventType().equals(EventType.EVENT_TYPE_ACTIVITY_TASK_SCHEDULED)) {
                 return he.getEventId();
             }
         }
@@ -438,6 +454,8 @@ public class S1WFUtils {
                         .setNamespace("default")
                         .setWorkflowExecution(existingUntyped.getExecution())
                         .setWorkflowTaskFinishEventId(taskFinishEventId)
+                        .setReason("im done w/ this")
+                        .setResetReapplyTypeValue(ResetReapplyType.RESET_REAPPLY_TYPE_SIGNAL_VALUE)
                         .build();
 
         ResetWorkflowExecutionResponse resetWorkflowExecutionResponse =
@@ -475,17 +493,18 @@ public class S1WFUtils {
     }
 
     public static void main(String[] args) {
+//        terminateWorkflows(null);
 //
 //        listOpenWorkflowsWithFilters("CronWorkflow", Timestamp.newBuilder()
 //                .setSeconds(1650313912)
 //                .build());
 
-        System.out.println("Cron: " +
-        getCronSchedule(WorkflowExecution.newBuilder()
-                .setWorkflowId("HelloCronWorkflow")
-                .setRunId("ae1f0112-4aab-4d43-a4d8-c6e455caa6d4")
-                .build())
-        );
+//        System.out.println("Cron: " +
+//        getCronSchedule(WorkflowExecution.newBuilder()
+//                .setWorkflowId("HelloCronWorkflow")
+//                .setRunId("ae1f0112-4aab-4d43-a4d8-c6e455caa6d4")
+//                .build())
+//        );
 
 //        listOpenWorkflowsByStartTime(1649807246);
 //        printCronSchedulesFor("NEWc3s5Workflow2");
@@ -493,7 +512,7 @@ public class S1WFUtils {
         //printArchivedWorkflowExecutions("ExecutionStatus=2");
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
-//        resetWorkflow(client, "HelloActivityWorkflow", "67ceba35-c88a-490b-8ea1-eca6ccfa5703", 3);
+        resetWorkflow(client, "HelloAsyncActivityWorkflow9", "0d59b99d-ed46-4b0b-b3ef-c4d2a1568f46", 3);
 //        getActivitiesWithRetriesOver(2);
 //        getPendingActivitiesLastFailureMessageDetails(WorkflowExecution.newBuilder()
 //                .setWorkflowId("HelloActivityWorkflow")
