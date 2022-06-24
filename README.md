@@ -76,10 +76,15 @@
   * Showing dashboard
   * [Worker tuning guide](https://docs.temporal.io/docs/operation/how-to-tune-workers/)
 
-### 5. [More Patterns, TBD, ...](src/main/java/io/workshop/CHAPTER5.md)
+### 5. [More Patterns, Cancellation, Interceptors, Workflow Execution+History and more ](src/main/java/io/workshop/CHAPTER5.md)
 
-* [Section 1 - More Patterns](src/main/java/io/workshop/CHAPTER5.md#Section-1)
+* [Section 1 - More Patterns / Cancellation/ Signals / Interceptors](src/main/java/io/workshop/CHAPTER5.md#Section-1)
   * Bulk Request
+  * Cascade wait for cancellation
+  * Handle multiple distinct signals in order
+  * Break workflow determinism + reset
+  
+* [Section 2 - Workflow Execution + History](src/main/java/io/workshop/CHAPTER5.md#Section-2)
   
 ## 6. Things planned for future Workshops
 * Let us know what you would like to have covered (open issue in this repo or ping us on slack!)

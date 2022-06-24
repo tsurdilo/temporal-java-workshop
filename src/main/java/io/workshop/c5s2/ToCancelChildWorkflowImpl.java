@@ -4,6 +4,7 @@ import io.temporal.activity.ActivityCancellationType;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
+import io.temporal.failure.CanceledFailure;
 import io.temporal.workflow.Async;
 import io.temporal.workflow.CancellationScope;
 import io.temporal.workflow.Promise;
@@ -19,20 +20,12 @@ public class ToCancelChildWorkflowImpl implements ToCancelChildWorkflow {
                 ActivityOptions.newBuilder()
                         .setStartToCloseTimeout(Duration.ofMinutes(1))
                         .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
-                        .setHeartbeatTimeout(Duration.ofSeconds(5))
-                        .setRetryOptions(RetryOptions.newBuilder()
-                                .setMaximumAttempts(1)
-                                .build())
+                        .setHeartbeatTimeout(Duration.ofSeconds(3))
                         .build());
 
-        CancellationScope activityScope =
-                Workflow.newCancellationScope(
-                        () -> {
-                           activityPromise = Async.function(activities::doSomething, input);
-                        });
+        activityPromise = Async.function(activities::doSomething, input);
 
-        activityScope.run();
-        String result = "";
+        String result;
         try {
             result = activityPromise.get();
         } catch (ActivityFailure e) {
@@ -41,7 +34,7 @@ public class ToCancelChildWorkflowImpl implements ToCancelChildWorkflow {
 
             // do some cleanup work if needed
             System.out.println("In Child - performing some cleanup...");
-            // rethrow the error
+            // rethrow the error to complete cancellation
             throw e;
         }
 

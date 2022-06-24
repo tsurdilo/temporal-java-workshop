@@ -1,6 +1,7 @@
 package io.workshop.c5s2;
 
 import io.temporal.api.enums.v1.ParentClosePolicy;
+import io.temporal.failure.CanceledFailure;
 import io.temporal.failure.ChildWorkflowFailure;
 import io.temporal.workflow.*;
 
@@ -17,9 +18,7 @@ public class ToCancelWorkflowImpl implements ToCancelWorkflow {
 
         childScope =
                 Workflow.newCancellationScope(
-                        () -> {
-                            childPromise = Async.function(child::execChild, input);
-                        });
+                        () -> childPromise = Async.function(child::execChild, input));
 
         childScope.run();
 
@@ -33,6 +32,9 @@ public class ToCancelWorkflowImpl implements ToCancelWorkflow {
             System.out.println("In Parent - performing some cleanup...");
             // return all cancelled
            return "all cancelled";
+        } catch (CanceledFailure ee) {
+            System.out.println("****** FROM CANCELLED!");
+            return "direct cancel";
         }
 
         return result;

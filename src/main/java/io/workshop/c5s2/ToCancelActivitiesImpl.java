@@ -3,6 +3,7 @@ package io.workshop.c5s2;
 import io.temporal.activity.Activity;
 import io.temporal.activity.ActivityExecutionContext;
 import io.temporal.client.ActivityCanceledException;
+import io.temporal.client.ActivityNotExistsException;
 
 public class ToCancelActivitiesImpl implements ToCancelActivities {
     @Override
@@ -18,7 +19,7 @@ public class ToCancelActivitiesImpl implements ToCancelActivities {
                 System.out.println("In Activity - received cancellation request.");
                 // do some "cleanup" if needed
                 System.out.println("In Activity - performing some cleanup...");
-                // rethrow the error
+                // rethrow the error to complete cancellation
                 throw e;
             }
         }
