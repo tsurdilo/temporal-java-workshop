@@ -33,6 +33,13 @@ Show how child waits for activity to cancel and parent waits for child to cancel
 
 * Code in package [c5s1](c5s4)
 
+## Logging - logback patterns and MDC context
+
+* [Logger Tags](https://github.com/temporalio/sdk-java/blob/master/temporal-sdk/src/main/java/io/temporal/internal/logging/LoggerTag.java)
+* Mapped Diagnostic Context (MDC) - enrich log messages
+  
+* Code in package [c5s1](c5s5)
+
 # Section 2
 
 ## Workflow execution + history

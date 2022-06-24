@@ -83,6 +83,7 @@
   * Cascade wait for cancellation
   * Handle multiple distinct signals in order
   * Break workflow determinism + replay + reset
+  * Logging - logback patterns and MDC context
   
 * [Section 2 - Workflow Execution + History](src/main/java/io/workshop/CHAPTER5.md#Section-2)
   

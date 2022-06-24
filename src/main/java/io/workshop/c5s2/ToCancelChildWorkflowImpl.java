@@ -19,6 +19,7 @@ public class ToCancelChildWorkflowImpl implements ToCancelChildWorkflow {
         ToCancelActivities activities = Workflow.newActivityStub(ToCancelActivities.class,
                 ActivityOptions.newBuilder()
                         .setStartToCloseTimeout(Duration.ofMinutes(1))
+                        // TODO point out we are waiting cancellation to complete
                         .setCancellationType(ActivityCancellationType.WAIT_CANCELLATION_COMPLETED)
                         .setHeartbeatTimeout(Duration.ofSeconds(3))
                         .build());
@@ -30,7 +31,10 @@ public class ToCancelChildWorkflowImpl implements ToCancelChildWorkflow {
             result = activityPromise.get();
         } catch (ActivityFailure e) {
             System.out.println("In Child, received ActivityFailure.");
-            System.out.println("In Child, activity cause: " + e.getCause().getClass().getName());
+
+            CanceledFailure canceledFailure =
+                    (CanceledFailure) e.getCause();
+            System.out.println("In Child, activity cancelled failure: " +canceledFailure.getMessage());
 
             // do some cleanup work if needed
             System.out.println("In Child - performing some cleanup...");

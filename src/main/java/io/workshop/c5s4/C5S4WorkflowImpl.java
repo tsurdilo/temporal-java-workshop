@@ -31,6 +31,7 @@ public class C5S4WorkflowImpl implements C5S4Workflow {
         // worker caching (sticky queue)
         // then break determinism by restarting worker with sleep
 
-//        Workflow.sleep(Duration.ofSeconds(15));
+        // TODO up to larger to stop worker
+        Workflow.sleep(Duration.ofSeconds(2));
     }
 }

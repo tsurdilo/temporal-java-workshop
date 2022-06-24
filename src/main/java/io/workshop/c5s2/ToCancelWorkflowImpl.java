@@ -13,6 +13,7 @@ public class ToCancelWorkflowImpl implements ToCancelWorkflow {
         ToCancelChildWorkflow child = Workflow.newChildWorkflowStub(ToCancelChildWorkflow.class,
                 ChildWorkflowOptions.newBuilder()
                         .setWorkflowId("ToCancelChild")
+                        // TODO point out we are waiting cancellation to complete
                         .setCancellationType(ChildWorkflowCancellationType.WAIT_CANCELLATION_COMPLETED)
                         .build());
 
