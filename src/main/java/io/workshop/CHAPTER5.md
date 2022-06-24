@@ -45,6 +45,10 @@ Show how child waits for activity to cancel and parent waits for child to cancel
   
 * Code in package [c5s1](c5s5)
 
+## Payload converter and no-args constructor - serialization/deserialization
+
+* Code in package [c5s1](c5s6)
+
 # Section 2
 
 ## Workflow execution + history

@@ -84,6 +84,7 @@
   * Handle multiple distinct signals in order
   * Break workflow determinism + replay + reset
   * Logging - logback patterns and MDC context
+  * Payload converter and no-args constructor - serialization/deserialization
   
 * [Section 2 - Workflow Execution + History](src/main/java/io/workshop/CHAPTER5.md#Section-2)
   
