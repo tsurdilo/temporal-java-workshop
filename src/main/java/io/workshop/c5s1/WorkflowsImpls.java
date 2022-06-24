@@ -27,7 +27,7 @@ public class WorkflowsImpls {
 
             // wait for bulk requester complete signal
             Workflow.await(() -> bulkResponse != null);
-            logger.info("** " + Workflow.getInfo().getWorkflowId() + " receiveved build request completion event");
+            logger.info("** " + Workflow.getInfo().getWorkflowId() + " received build request completion event");
             return bulkResponse;
         }
 
@@ -54,7 +54,7 @@ public class WorkflowsImpls {
 
             // wait for bulk requester complete signal
             Workflow.await(() -> bulkResponse != null);
-            logger.info("** " + Workflow.getInfo().getWorkflowId() + " receiveved build request completion event");
+            logger.info("** " + Workflow.getInfo().getWorkflowId() + " received build request completion event");
             return bulkResponse;
         }
 
