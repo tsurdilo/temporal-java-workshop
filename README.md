@@ -49,6 +49,10 @@
 
 ### 4. [How-tos, Patterns, SDK Metrics](src/main/java/io/workshop/CHAPTER4.md)
 
+<p align="center">
+ <a href="https://www.youtube.com/watch?v=v-s-Umt1Q0A"><img src="media/workshop-5-video.png" width="50%"/></a>
+</p>
+
 * Intro - Java SDK Updates / Roadmap - Dmitry
 
 * [Section 1 - More "how tos" and "gotchas"](src/main/java/io/workshop/CHAPTER4.md#Section-1)
@@ -71,8 +75,13 @@
   * Enabling SDK metrics (Worker, "Starter")
   * Showing dashboard
   * [Worker tuning guide](https://docs.temporal.io/docs/operation/how-to-tune-workers/)
-    
-## 5. Things planned for future Workshops
+
+### 5. [More Patterns, TBD, ...](src/main/java/io/workshop/CHAPTER5.md)
+
+* [Section 1 - More Patterns](src/main/java/io/workshop/CHAPTER5.md#Section-1)
+  * Bulk Request
+  
+## 6. Things planned for future Workshops
 * Let us know what you would like to have covered (open issue in this repo or ping us on slack!)
 
 
