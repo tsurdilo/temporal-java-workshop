@@ -109,7 +109,7 @@ Gradle:
 ```
 git clone git@github.com:temporalio/docker-compose.git
 cd docker-compose
-docker-compose -f docker-compose-cas-es.yml up
+docker-compose -f docker-compose-cass-es.yml up
 ```   
 
 Note: for workshop samples to all run we need Elasticsearch enabled
@@ -118,7 +118,7 @@ Note: for workshop samples to all run we need Elasticsearch enabled
 * [Temporal Helm Charts Repo](https://github.com/temporalio/helm-charts)
 * [Installing and Running Temporal Server on Docker Compose and Minikube Video](https://www.youtube.com/watch?v=f6N3ZcWHygU)
 
-* Look at [Web UI](http://localhost:808/)
+* Look at [Web UI](http://localhost:8088/)
 * Useful Docker commands for cleaning up **DEV** environment:
   (note stop the Temporal server before you run this :) )
 ```
@@ -327,8 +327,8 @@ io.workshop.intro.GetFinalCount
 
 * Add search attributes via tctl:
 ```
-tctl admin cluster add-search-attributes --name CustomerTitle --type String
-tctl admin cluster add-search-attributes --name CustomerLanguages --type String
+tctl admin cluster add-search-attributes --name CustomerTitle --type Text
+tctl admin cluster add-search-attributes --name CustomerLanguages --type Text
 tctl admin cluster add-search-attributes --name CustomerAge --type Int
 ```
 
