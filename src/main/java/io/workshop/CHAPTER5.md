@@ -31,6 +31,11 @@ Show how child waits for activity to cancel and parent waits for child to cancel
 
 ## Break workflow determinism + replay + reset
 
+* [Workflow impl constraints](https://docs.temporal.io/java/workflows#workflow-implementation-constraints)
+* [Forum post on Workflow determinism](https://community.temporal.io/t/workflow-determinism/4027)
+* [Worker Tuning Guide](https://docs.temporal.io/operation/how-to-tune-workers/)
+   * worker cache metric: sticky_cache_size
+
 * Code in package [c5s1](c5s4)
 
 ## Logging - logback patterns and MDC context

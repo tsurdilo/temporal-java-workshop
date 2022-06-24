@@ -16,7 +16,8 @@ public class Starter {
                 WorkflowOptions.newBuilder()
                         .setWorkflowId("myworkflow")
                         .setTaskQueue(taskQueue)
-                        .setWorkflowExecutionTimeout(Duration.ofMinutes(1))
+                        // set workflow execution timeout to time out "rogue" workflows
+//                        .setWorkflowExecutionTimeout(Duration.ofMinutes(2))
                         .build());
 
         workflow.exec();

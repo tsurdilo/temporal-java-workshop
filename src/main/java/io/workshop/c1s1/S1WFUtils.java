@@ -446,16 +446,16 @@ public class S1WFUtils {
     /**
      * Reset a workflow to a specific taskFinishEventId given its workfow id and run id
      */
-    public static void resetWorkflow(WorkflowClient client, String workflowId, String runId, long taskFinishEventId) {
-        WorkflowStub existingUntyped = client.newUntypedWorkflowStub(workflowId, Optional.of(runId), Optional.of("GreetingWorkflow"));
+    public static void resetWorkflow(WorkflowClient client, String workflowId, String runId, long taskFinishEventId,
+                                     String reason) {
+        WorkflowStub existingUntyped = client.newUntypedWorkflowStub(workflowId, Optional.of(runId), Optional.empty());
         ResetWorkflowExecutionRequest resetWorkflowExecutionRequest =
                 ResetWorkflowExecutionRequest.newBuilder()
                         .setRequestId(UUID.randomUUID().toString())
-                        .setNamespace("default")
+                        .setNamespace(client.getOptions().getNamespace())
                         .setWorkflowExecution(existingUntyped.getExecution())
                         .setWorkflowTaskFinishEventId(taskFinishEventId)
-                        .setReason("im done w/ this")
-                        .setResetReapplyTypeValue(ResetReapplyType.RESET_REAPPLY_TYPE_SIGNAL_VALUE)
+                        .setReason(reason)
                         .build();
 
         ResetWorkflowExecutionResponse resetWorkflowExecutionResponse =
@@ -512,7 +512,7 @@ public class S1WFUtils {
         //printArchivedWorkflowExecutions("ExecutionStatus=2");
 
         //printWorkflowExecutionHistory(client, "c1GreetingWorkflow", "ca6d5cee-cefa-41d6-bade-fdca490d90f4");
-        resetWorkflow(client, "HelloAsyncActivityWorkflow9", "0d59b99d-ed46-4b0b-b3ef-c4d2a1568f46", 3);
+        resetWorkflow(client, "myworkflow", "8b1ace32-3934-49de-b12f-a2cda2e03916", 3, "test reasons");
 //        getActivitiesWithRetriesOver(2);
 //        getPendingActivitiesLastFailureMessageDetails(WorkflowExecution.newBuilder()
 //                .setWorkflowId("HelloActivityWorkflow")
